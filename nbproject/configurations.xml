@@ -26,8 +26,9 @@
       <itemPath>stream_buffer.h</itemPath>
       <itemPath>task.h</itemPath>
       <itemPath>timers.h</itemPath>
+      <itemPath>user_app.h</itemPath>
       <itemPath>FreeRTOSConfig.h</itemPath>
-      <itemPath>jantar.h</itemPath>
+      <itemPath>user_drivers.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -50,9 +51,11 @@
       <itemPath>tasks.c</itemPath>
       <itemPath>timers.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>user_app.c</itemPath>
       <itemPath>portasm_PIC24.S</itemPath>
       <itemPath>heap_1.c</itemPath>
-      <itemPath>jantar.c</itemPath>
+      <itemPath>user_drivers.c</itemPath>
+      <itemPath>config_bits.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -69,7 +72,7 @@
         <platformTool>noID</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>2.10</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>4</platform>
       </toolsSet>
       <packs>
         <pack name="PIC24F-GA-GB_DFP" vendor="Microchip" version="1.10.375"/>
