@@ -3,22 +3,14 @@
 #include <stdio.h>
 #include <p24FJ128GA010.h>
 
-// LEDs: RB13 = Baixo, RB14 = OK, RB15 = Alto
-void LED_Status_Baixo(int state) { LATBbits.LATB13 = (state == ON) ? 1 : 0; }
-void LED_Status_OK(int state)    { LATBbits.LATB14 = (state == ON) ? 1 : 0; }
+// LED: RB15 = Alto (alarme)
 void LED_Status_Alto(int state)  { LATBbits.LATB15 = (state == ON) ? 1 : 0; }
 
 void Init_DigitalOutputs(void) {
-    AD1PCFGbits.PCFG9  = 1;  // RB15/AN9  como digital
-    AD1PCFGbits.PCFG10 = 1;  // RB14/AN10 como digital
-    AD1PCFGbits.PCFG11 = 1;  // RB13/AN11 como digital
+    AD1PCFGbits.PCFG9 = 1;  // RB15/AN9 como digital
 
-    TRISBbits.TRISB13 = 0;
-    TRISBbits.TRISB14 = 0;
     TRISBbits.TRISB15 = 0;
 
-    LED_Status_Baixo(OFF);
-    LED_Status_OK(OFF);
     LED_Status_Alto(OFF);
 }
 

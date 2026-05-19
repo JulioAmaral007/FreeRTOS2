@@ -8,6 +8,7 @@
 
 QueueHandle_t xLevelQueue;
 SemaphoreHandle_t xUARTMutex;
+SemaphoreHandle_t xBufferMutex;
 SemaphoreHandle_t xEmergencySemaphore;
 
 int main() {
@@ -19,9 +20,11 @@ int main() {
     // Objetos FreeRTOS
     xLevelQueue         = xQueueCreate(5, sizeof(uint16_t));
     xUARTMutex          = xSemaphoreCreateMutex();
+    xBufferMutex        = xSemaphoreCreateMutex();
     xEmergencySemaphore = xSemaphoreCreateBinary();
 
-    if (xLevelQueue == NULL || xUARTMutex == NULL || xEmergencySemaphore == NULL) {
+    if (xLevelQueue == NULL || xUARTMutex == NULL ||
+        xBufferMutex == NULL || xEmergencySemaphore == NULL) {
         while(1);
     }
 

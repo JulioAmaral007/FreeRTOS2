@@ -11,17 +11,19 @@
 #include "timers.h"
 
 // Limites de temperatura em graus Celsius (LM35)
-#define LEVEL_LOW  20   // abaixo de 20 °C → alerta frio
 #define LEVEL_HIGH 50   // acima de 50 °C → alarme
 
 #define REPORT_TASK_DELAY_MS 3000
 
 extern QueueHandle_t xLevelQueue;
 extern SemaphoreHandle_t xUARTMutex;
+extern SemaphoreHandle_t xBufferMutex;
 extern SemaphoreHandle_t xEmergencySemaphore;
 
-// Buffer compartilhado entre tarefa de controle e tarefa UART
-static volatile uint16_t g_uiLastTemperature = 0;
+// Buffer compartilhado entre tarefa de controle (escritor) e tarefa UART (leitor).
+// Protegido por xBufferMutex — leituras/escritas sao compostas (struct),
+// portanto exigem exclusao mutua explicita.
+static TempBuffer_t g_xBuffer = { 0, 0, TEMP_STATUS_OK };
 
 // Software Timer callback — recurso FreeRTOS não visto em aula (T2)
 void vWatchdogTimerCallback(TimerHandle_t xTimer) {
@@ -41,29 +43,30 @@ void vTask_ControlLogic(void *pvParameters) {
 
     for (;;) {
         if (xQueueReceive(xLevelQueue, &uiReceivedTemp, portMAX_DELAY) == pdPASS) {
-            g_uiLastTemperature = uiReceivedTemp;
+            uint8_t uiStatus;
 
-            if (uiReceivedTemp < LEVEL_LOW) {
-                LED_Status_Baixo(ON);
-                LED_Status_OK(OFF);
-                LED_Status_Alto(OFF);
-                if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
-                    UART_SendString("\nALERTA: Temperatura Baixa!\r\n");
-                    xSemaphoreGive(xUARTMutex);
-                }
-            } else if (uiReceivedTemp > LEVEL_HIGH) {
-                LED_Status_Baixo(OFF);
-                LED_Status_OK(OFF);
+            if (uiReceivedTemp > LEVEL_HIGH) {
+                uiStatus = TEMP_STATUS_ALTA;
                 LED_Status_Alto(ON);
+            } else {
+                uiStatus = TEMP_STATUS_OK;
+                LED_Status_Alto(OFF);
+            }
+
+            // Escrita no buffer compartilhado sob exclusao mutua
+            if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
+                g_xBuffer.temperatura = uiReceivedTemp;
+                g_xBuffer.timestamp   = xTaskGetTickCount();
+                g_xBuffer.status      = uiStatus;
+                xSemaphoreGive(xBufferMutex);
+            }
+
+            if (uiStatus == TEMP_STATUS_ALTA) {
                 if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
                     UART_SendString("\nALERTA: Temperatura Alta!\r\n");
                     xSemaphoreGive(xUARTMutex);
                 }
                 xSemaphoreGive(xEmergencySemaphore);
-            } else {
-                LED_Status_Baixo(OFF);
-                LED_Status_OK(ON);
-                LED_Status_Alto(OFF);
             }
         }
     }
@@ -75,12 +78,34 @@ void vTask_ReportStatus(void *pvParameters) {
     const TickType_t xFrequency = pdMS_TO_TICKS(REPORT_TASK_DELAY_MS);
     const TickType_t xMutexWaitTicks = pdMS_TO_TICKS(1000);
     char cReportBuffer[80];
+    TempBuffer_t xSnapshot;
+    const char *pcStatusStr;
+
+    (void)pvParameters;
 
     for (;;) {
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
+        // Tira um snapshot do buffer compartilhado sob mutex,
+        // libera rapidamente e formata fora da secao critica.
+        if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
+            xSnapshot = g_xBuffer;
+            xSemaphoreGive(xBufferMutex);
+        } else {
+            continue;
+        }
+
+        switch (xSnapshot.status) {
+            case TEMP_STATUS_ALTA: pcStatusStr = "ALTA"; break;
+            default:               pcStatusStr = "OK";   break;
+        }
+
         if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
-            sprintf(cReportBuffer, "[STATUS] Temperatura: %u C\r\n", g_uiLastTemperature);
+            sprintf(cReportBuffer,
+                    "[STATUS] T=%u C | tick=%lu | %s\r\n",
+                    xSnapshot.temperatura,
+                    (unsigned long)xSnapshot.timestamp,
+                    pcStatusStr);
             UART_SendString("\n--- LEITURA DE TEMPERATURA ---\r\n");
             UART_SendString(cReportBuffer);
             UART_SendString("------------------------------\r\n");
@@ -112,12 +137,8 @@ void vTask_EmergencyHandler(void *pvParameters) {
     for (;;) {
         if (xSemaphoreTake(xEmergencySemaphore, portMAX_DELAY) == pdTRUE) {
             for (int i = 0; i < 3; i++) {
-                LED_Status_Baixo(ON);
-                LED_Status_OK(ON);
                 LED_Status_Alto(ON);
                 vTaskDelay(pdMS_TO_TICKS(100));
-                LED_Status_Baixo(OFF);
-                LED_Status_OK(OFF);
                 LED_Status_Alto(OFF);
                 vTaskDelay(pdMS_TO_TICKS(100));
             }

@@ -9,8 +9,6 @@
 #define OFF 0
 
 // LEDs
-void LED_Status_Baixo(int state);
-void LED_Status_OK(int state);
 void LED_Status_Alto(int state);
 
 // UART
