@@ -129,11 +129,11 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0xea8          0x15fc  (5628)
 .const                      0x10a8               0x126           0x1b9  (441)
-.text                       0x11ce              0x5218          0x7b24  (31524)
-.dinit                      0x63e6                0x5a            0x87  (135)
-.text                       0x6440                0x50            0x78  (120)
+.text                       0x11ce              0x51ce          0x7ab5  (31413)
+.dinit                      0x639c                0x5a            0x87  (135)
+.text                       0x63f6                0x50            0x78  (120)
 
-                 Total "program" memory used (bytes):         0x93d8  (37848) 28%
+                 Total "program" memory used (bytes):         0x9369  (37737) 28%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
@@ -363,35 +363,35 @@ External Symbols in Program Memory (by address):
                   0x005f94                  _vPortEndScheduler
                   0x005fda                  _vPortEnterCritical
                   0x005ff4                  _vPortExitCritical
-                  0x006026                  _LED_Status_Alto
-                  0x006048                  _Init_DigitalOutputs
-                  0x006056                  _UART_SendChar
-                  0x00606e                  _UART_SendString
-                  0x006088                  _Init_UART1
-                  0x0060ca                  _Init_ADC1
-                  0x006122                  _ADC1_ReadTemperature
-                  0x006172                  _vListInitialise
-                  0x0061a4                  _vListInitialiseItem
-                  0x0061b2                  _vListInsertEnd
-                  0x0061ee                  _vListInsert
-                  0x006252                  _uxListRemove
-                  0x00629a                  _pvPortMalloc
-                  0x006308                  _vPortFree
-                  0x006326                  _vPortInitialiseBlocks
-                  0x00632e                  _xPortGetFreeHeapSize
-                  0x00633a                  _vPortHeapResetState
-                  0x006342                  _main
-                  0x006440                  _vPortYield
+                  0x006026                  _vListInitialise
+                  0x006058                  _vListInitialiseItem
+                  0x006066                  _vListInsertEnd
+                  0x0060a2                  _vListInsert
+                  0x006106                  _uxListRemove
+                  0x00614e                  _LED_Status_Alto
+                  0x006170                  _Init_DigitalOutputs
+                  0x00617e                  _UART_SendChar
+                  0x006196                  _UART_SendString
+                  0x0061b0                  _Init_UART1
+                  0x0061e4                  _Init_ADC1
+                  0x006218                  _ADC1_ReadTemperature
+                  0x006250                  _pvPortMalloc
+                  0x0062be                  _vPortFree
+                  0x0062dc                  _vPortInitialiseBlocks
+                  0x0062e4                  _xPortGetFreeHeapSize
+                  0x0062f0                  _vPortHeapResetState
+                  0x0062f8                  _main
+                  0x0063f6                  _vPortYield
 
 External Symbols in Program Memory (by name):
 
-                  0x006122                  _ADC1_ReadTemperature
-                  0x0060ca                  _Init_ADC1
-                  0x006048                  _Init_DigitalOutputs
-                  0x006088                  _Init_UART1
-                  0x006026                  _LED_Status_Alto
-                  0x006056                  _UART_SendChar
-                  0x00606e                  _UART_SendString
+                  0x006218                  _ADC1_ReadTemperature
+                  0x0061e4                  _Init_ADC1
+                  0x006170                  _Init_DigitalOutputs
+                  0x0061b0                  _Init_UART1
+                  0x00614e                  _LED_Status_Alto
+                  0x00617e                  _UART_SendChar
+                  0x006196                  _UART_SendString
                   0x000314                  __DefaultInterrupt
                   0x0002e4                  __T1Interrupt
                   0x00059a                  ___cvt_u
@@ -428,12 +428,12 @@ External Symbols in Program Memory (by name):
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
                   0x000cf4                  _atoi
-                  0x006342                  _main
+                  0x0062f8                  _main
                   0x000354                  _memcpy
                   0x000362                  _memset
                   0x001df8                  _pcTaskGetName
                   0x0053ee                  _pcTimerGetName
-                  0x00629a                  _pvPortMalloc
+                  0x006250                  _pvPortMalloc
                   0x0029cc                  _pvTaskIncrementMutexHeldCount
                   0x005776                  _pvTimerGetTimerID
                   0x005ed6                  _pxPortInitialiseStack
@@ -442,7 +442,7 @@ External Symbols in Program Memory (by name):
                   0x000d7e                  _toupper
                   0x0029e8                  _ulTaskGenericNotifyTake
                   0x0031f4                  _ulTaskGenericNotifyValueClear
-                  0x006252                  _uxListRemove
+                  0x006106                  _uxListRemove
                   0x00411a                  _uxQueueGetQueueItemSize
                   0x004126                  _uxQueueGetQueueLength
                   0x004064                  _uxQueueMessagesWaiting
@@ -461,17 +461,17 @@ External Symbols in Program Memory (by name):
                   0x005ce6                  _vEventGroupClearBitsCallback
                   0x005c1c                  _vEventGroupDelete
                   0x005cd4                  _vEventGroupSetBitsCallback
-                  0x006172                  _vListInitialise
-                  0x0061a4                  _vListInitialiseItem
-                  0x0061ee                  _vListInsert
-                  0x0061b2                  _vListInsertEnd
+                  0x006026                  _vListInitialise
+                  0x006058                  _vListInitialiseItem
+                  0x0060a2                  _vListInsert
+                  0x006066                  _vListInsertEnd
                   0x005f94                  _vPortEndScheduler
                   0x005fda                  _vPortEnterCritical
                   0x005ff4                  _vPortExitCritical
-                  0x006308                  _vPortFree
-                  0x00633a                  _vPortHeapResetState
-                  0x006326                  _vPortInitialiseBlocks
-                  0x006440                  _vPortYield
+                  0x0062be                  _vPortFree
+                  0x0062f0                  _vPortHeapResetState
+                  0x0062dc                  _vPortInitialiseBlocks
+                  0x0063f6                  _vPortYield
                   0x0040ec                  _vQueueDelete
                   0x00437e                  _vQueueWaitForMessageRestricted
                   0x0045f8                  _vStreamBufferDelete
@@ -511,7 +511,7 @@ External Symbols in Program Memory (by name):
                   0x005b22                  _xEventGroupSetBits
                   0x005854                  _xEventGroupSync
                   0x005966                  _xEventGroupWaitBits
-                  0x00632e                  _xPortGetFreeHeapSize
+                  0x0062e4                  _xPortGetFreeHeapSize
                   0x005f66                  _xPortStartScheduler
                   0x003788                  _xQueueCreateCountingSemaphore
                   0x003736                  _xQueueCreateCountingSemaphoreStatic
@@ -789,7 +789,7 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info       0x000000       0xb399
+.debug_info       0x000000       0xb206
  *(.debug_info)
  .debug_info      0x000000        0x169 build/default/production/croutine.o
  .debug_info      0x000169        0xcb4 build/default/production/event_groups.o
@@ -803,15 +803,15 @@ __CONFIG1
  .debug_info      0x0092de        0x559 build/default/production/user_app.o
  .debug_info      0x009837         0xa4 build/default/production/portasm_PIC24.o
  .debug_info      0x0098db        0x3f8 build/default/production/heap_1.o
- .debug_info      0x009cd3       0x134f build/default/production/user_drivers.o
- .debug_info      0x00b022        0x141 build/default/production/config_bits.o
- .debug_info      0x00b163         0x8d c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
- .debug_info      0x00b1f0         0x90 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
- .debug_info      0x00b280         0x8d c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
- .debug_info      0x00b30d         0x8c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
+ .debug_info      0x009cd3       0x11bc build/default/production/user_drivers.o
+ .debug_info      0x00ae8f        0x141 build/default/production/config_bits.o
+ .debug_info      0x00afd0         0x8d c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+ .debug_info      0x00b05d         0x90 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
+ .debug_info      0x00b0ed         0x8d c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
+ .debug_info      0x00b17a         0x8c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000       0x11ab
+.debug_abbrev     0x000000       0x11a2
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0x1f build/default/production/croutine.o
  .debug_abbrev    0x00001f        0x1f4 build/default/production/event_groups.o
@@ -825,14 +825,14 @@ __CONFIG1
  .debug_abbrev    0x000de7         0xe7 build/default/production/user_app.o
  .debug_abbrev    0x000ece         0x14 build/default/production/portasm_PIC24.o
  .debug_abbrev    0x000ee2        0x12e build/default/production/heap_1.o
- .debug_abbrev    0x001010        0x12c build/default/production/user_drivers.o
- .debug_abbrev    0x00113c         0x1f build/default/production/config_bits.o
- .debug_abbrev    0x00115b         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
- .debug_abbrev    0x00116f         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
- .debug_abbrev    0x001183         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
- .debug_abbrev    0x001197         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
+ .debug_abbrev    0x001010        0x123 build/default/production/user_drivers.o
+ .debug_abbrev    0x001133         0x1f build/default/production/config_bits.o
+ .debug_abbrev    0x001152         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+ .debug_abbrev    0x001166         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
+ .debug_abbrev    0x00117a         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
+ .debug_abbrev    0x00118e         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
 
-.debug_line       0x000000       0x1b20
+.debug_line       0x000000       0x1b11
  *(.debug_line)
  .debug_line      0x000000         0x1a build/default/production/croutine.o
  .debug_line      0x00001a        0x22f build/default/production/event_groups.o
@@ -843,15 +843,15 @@ __CONFIG1
  .debug_line      0x000bfb        0x66d build/default/production/tasks.o
  .debug_line      0x001268        0x2c1 build/default/production/timers.o
  .debug_line      0x001529         0xc9 build/default/production/main.o
- .debug_line      0x0015f2        0x11b build/default/production/user_app.o
- .debug_line      0x00170d         0x62 build/default/production/portasm_PIC24.o
- .debug_line      0x00176f        0x12a build/default/production/heap_1.o
- .debug_line      0x001899        0x14b build/default/production/user_drivers.o
- .debug_line      0x0019e4         0x1a build/default/production/config_bits.o
- .debug_line      0x0019fe         0x45 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
- .debug_line      0x001a43         0x59 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
- .debug_line      0x001a9c         0x4a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
- .debug_line      0x001ae6         0x3a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
+ .debug_line      0x0015f2        0x11d build/default/production/user_app.o
+ .debug_line      0x00170f         0x62 build/default/production/portasm_PIC24.o
+ .debug_line      0x001771        0x12a build/default/production/heap_1.o
+ .debug_line      0x00189b        0x13a build/default/production/user_drivers.o
+ .debug_line      0x0019d5         0x1a build/default/production/config_bits.o
+ .debug_line      0x0019ef         0x45 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+ .debug_line      0x001a34         0x59 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
+ .debug_line      0x001a8d         0x4a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
+ .debug_line      0x001ad7         0x3a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
 
 .debug_frame      0x000000       0x1506
  *(.debug_frame)
@@ -867,7 +867,7 @@ __CONFIG1
  .debug_frame     0x0013a6         0x96 build/default/production/heap_1.o
  .debug_frame     0x00143c         0xca build/default/production/user_drivers.o
 
-.debug_str        0x000000        0x8f2
+.debug_str        0x000000        0x8e6
  *(.debug_str)
  .debug_str       0x000000         0xef build/default/production/event_groups.o
  .debug_str       0x0000ef         0x2b build/default/production/list.o
@@ -878,7 +878,7 @@ __CONFIG1
  .debug_str       0x0006ba        0x135 build/default/production/timers.o
  .debug_str       0x0007ef         0x38 build/default/production/main.o
  .debug_str       0x000827         0x55 build/default/production/user_app.o
- .debug_str       0x00087c         0x76 build/default/production/user_drivers.o
+ .debug_str       0x00087c         0x6a build/default/production/user_drivers.o
 
 .debug_loc
  *(.debug_loc)
@@ -1532,7 +1532,7 @@ LOAD default_isr
 LOAD data_init
 
 .debug_pubtypes
-                  0x0001a8        0xe8e
+                  0x0001a8        0xe6b
  .debug_pubtypes
                   0x0001a8         0x12 build/default/production/croutine.o
  .debug_pubtypes
@@ -1556,92 +1556,92 @@ LOAD data_init
  .debug_pubtypes
                   0x000e61         0x4f build/default/production/heap_1.o
  .debug_pubtypes
-                  0x000eb0        0x174 build/default/production/user_drivers.o
+                  0x000eb0        0x151 build/default/production/user_drivers.o
  .debug_pubtypes
-                  0x001024         0x12 build/default/production/config_bits.o
+                  0x001001         0x12 build/default/production/config_bits.o
 
 __c30_signature
-                  0x001036         0xf0
+                  0x001013         0xf0
  __c30_signature
-                  0x001036          0x6 build/default/production/croutine.o
+                  0x001013          0x6 build/default/production/croutine.o
  __c30_signature
-                  0x00103c          0x6 build/default/production/event_groups.o
+                  0x001019          0x6 build/default/production/event_groups.o
  __c30_signature
-                  0x001042          0x6 build/default/production/list.o
+                  0x00101f          0x6 build/default/production/list.o
  __c30_signature
-                  0x001048          0x6 build/default/production/port.o
+                  0x001025          0x6 build/default/production/port.o
  __c30_signature
-                  0x00104e          0x6 build/default/production/queue.o
+                  0x00102b          0x6 build/default/production/queue.o
  __c30_signature
-                  0x001054          0x6 build/default/production/stream_buffer.o
+                  0x001031          0x6 build/default/production/stream_buffer.o
  __c30_signature
-                  0x00105a          0x6 build/default/production/tasks.o
+                  0x001037          0x6 build/default/production/tasks.o
  __c30_signature
-                  0x001060          0x6 build/default/production/timers.o
+                  0x00103d          0x6 build/default/production/timers.o
  __c30_signature
-                  0x001066          0x6 build/default/production/main.o
+                  0x001043          0x6 build/default/production/main.o
  __c30_signature
-                  0x00106c          0x6 build/default/production/user_app.o
+                  0x001049          0x6 build/default/production/user_app.o
  __c30_signature
-                  0x001072          0x6 build/default/production/heap_1.o
+                  0x00104f          0x6 build/default/production/heap_1.o
  __c30_signature
-                  0x001078          0x6 build/default/production/user_drivers.o
+                  0x001055          0x6 build/default/production/user_drivers.o
  __c30_signature
-                  0x00107e          0x6 build/default/production/config_bits.o
+                  0x00105b          0x6 build/default/production/config_bits.o
  __c30_signature
-                  0x001084          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
+                  0x001061          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
  __c30_signature
-                  0x00108a          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
+                  0x001067          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
  __c30_signature
-                  0x001090          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+                  0x00106d          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
  __c30_signature
-                  0x001096          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__sio_sprintf_dosux.XX_o)
+                  0x001073          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__sio_sprintf_dosux.XX_o)
  __c30_signature
-                  0x00109c          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcpy.XX_o)
+                  0x001079          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcpy.XX_o)
  __c30_signature
-                  0x0010a2          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memset.XX_o)
+                  0x00107f          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memset.XX_o)
  __c30_signature
-                  0x0010a8          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_d.XX_o)
+                  0x001085          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_d.XX_o)
  __c30_signature
-                  0x0010ae          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_o.XX_o)
+                  0x00108b          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_o.XX_o)
  __c30_signature
-                  0x0010b4          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_s.XX_o)
+                  0x001091          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_s.XX_o)
  __c30_signature
-                  0x0010ba          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_u.XX_o)
+                  0x001097          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_u.XX_o)
  __c30_signature
-                  0x0010c0          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_x.XX_o)
+                  0x00109d          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__fmt_x.XX_o)
  __c30_signature
-                  0x0010c6          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vsprintf.XX_o)
+                  0x0010a3          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vsprintf.XX_o)
  __c30_signature
-                  0x0010cc          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_int.XX_o)
+                  0x0010a9          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_int.XX_o)
  __c30_signature
-                  0x0010d2          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_ptr.XX_o)
+                  0x0010af          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_ptr.XX_o)
  __c30_signature
-                  0x0010d8          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__printf_core.XX_o)
+                  0x0010b5          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__printf_core.XX_o)
  __c30_signature
-                  0x0010de          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(atoi.XX_o)
+                  0x0010bb          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(atoi.XX_o)
  __c30_signature
-                  0x0010e4          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(strlen.XX_o)
+                  0x0010c1          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(strlen.XX_o)
  __c30_signature
-                  0x0010ea          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(tolower.XX_o)
+                  0x0010c7          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(tolower.XX_o)
  __c30_signature
-                  0x0010f0          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(toupper.XX_o)
+                  0x0010cd          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(toupper.XX_o)
  __c30_signature
-                  0x0010f6          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__errno_location.XX_o)
+                  0x0010d3          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__errno_location.XX_o)
  __c30_signature
-                  0x0010fc          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vsnprintf.XX_o)
+                  0x0010d9          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vsnprintf.XX_o)
  __c30_signature
-                  0x001102          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_float.XX_o)
+                  0x0010df          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__pop_float.XX_o)
  __c30_signature
-                  0x001108          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vfprintf.XX_o)
+                  0x0010e5          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(__int_vfprintf.XX_o)
  __c30_signature
-                  0x00110e          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
+                  0x0010eb          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
  __c30_signature
-                  0x001114          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
+                  0x0010f1          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
  __c30_signature
-                  0x00111a          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
+                  0x0010f7          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
  __c30_signature
-                  0x001120          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x0010fd          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
 
 .nbss               0x0800         0x34
  .nbss              0x0800         0x1e build/default/production/tasks.o
@@ -1686,7 +1686,7 @@ __c30_signature
  .const             0x91be          0x8 build/default/production/tasks.o
  .const             0x91c6          0x8 build/default/production/timers.o
 
-.text             0x0011ce       0x5218
+.text             0x0011ce       0x51ce
  .text            0x0011ce       0x21a6 build/default/production/tasks.o
                   0x00126c                  _xTaskCreateStatic
                   0x001308                  _xTaskCreate
@@ -1834,32 +1834,32 @@ __c30_signature
                   0x005fb2                  _vApplicationSetupTickTimerInterrupt
                   0x005fda                  _vPortEnterCritical
                   0x005ff4                  _vPortExitCritical
- .text            0x006026        0x14c build/default/production/user_drivers.o
-                  0x006026                  _LED_Status_Alto
-                  0x006048                  _Init_DigitalOutputs
-                  0x006056                  _UART_SendChar
-                  0x00606e                  _UART_SendString
-                  0x006088                  _Init_UART1
-                  0x0060ca                  _Init_ADC1
-                  0x006122                  _ADC1_ReadTemperature
- .text            0x006172        0x128 build/default/production/list.o
-                  0x006172                  _vListInitialise
-                  0x0061a4                  _vListInitialiseItem
-                  0x0061b2                  _vListInsertEnd
-                  0x0061ee                  _vListInsert
-                  0x006252                  _uxListRemove
- .text            0x00629a         0xa8 build/default/production/heap_1.o
-                  0x00629a                  _pvPortMalloc
-                  0x006308                  _vPortFree
-                  0x006326                  _vPortInitialiseBlocks
-                  0x00632e                  _xPortGetFreeHeapSize
-                  0x00633a                  _vPortHeapResetState
- .text            0x006342         0xa4 build/default/production/main.o
-                  0x006342                  _main
+ .text            0x006026        0x128 build/default/production/list.o
+                  0x006026                  _vListInitialise
+                  0x006058                  _vListInitialiseItem
+                  0x006066                  _vListInsertEnd
+                  0x0060a2                  _vListInsert
+                  0x006106                  _uxListRemove
+ .text            0x00614e        0x102 build/default/production/user_drivers.o
+                  0x00614e                  _LED_Status_Alto
+                  0x006170                  _Init_DigitalOutputs
+                  0x00617e                  _UART_SendChar
+                  0x006196                  _UART_SendString
+                  0x0061b0                  _Init_UART1
+                  0x0061e4                  _Init_ADC1
+                  0x006218                  _ADC1_ReadTemperature
+ .text            0x006250         0xa8 build/default/production/heap_1.o
+                  0x006250                  _pvPortMalloc
+                  0x0062be                  _vPortFree
+                  0x0062dc                  _vPortInitialiseBlocks
+                  0x0062e4                  _xPortGetFreeHeapSize
+                  0x0062f0                  _vPortHeapResetState
+ .text            0x0062f8         0xa4 build/default/production/main.o
+                  0x0062f8                  _main
 
-.dinit            0x0063e6         0x5a
- .dinit           0x0063e6         0x5a data_init
+.dinit            0x00639c         0x5a
+ .dinit           0x00639c         0x5a data_init
 
-.text             0x006440         0x50
- .text            0x006440         0x50 build/default/production/portasm_PIC24.o
-                  0x006440                  _vPortYield
+.text             0x0063f6         0x50
+ .text            0x0063f6         0x50 build/default/production/portasm_PIC24.o
+                  0x0063f6                  _vPortYield

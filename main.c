@@ -12,12 +12,10 @@ SemaphoreHandle_t xBufferMutex;
 SemaphoreHandle_t xEmergencySemaphore;
 
 int main() {
-    // Hardware
     Init_DigitalOutputs();
     Init_UART1(9600);
     Init_ADC1();
 
-    // Objetos FreeRTOS
     xLevelQueue         = xQueueCreate(5, sizeof(uint16_t));
     xUARTMutex          = xSemaphoreCreateMutex();
     xBufferMutex        = xSemaphoreCreateMutex();
@@ -45,5 +43,4 @@ int main() {
     vTaskStartScheduler();
 
     while (1);
-    return 0;
 }

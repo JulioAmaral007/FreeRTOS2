@@ -10,32 +10,34 @@
 #include <stdio.h>
 #include "timers.h"
 
-// Limites de temperatura em graus Celsius (LM35)
-#define LEVEL_HIGH 50   // acima de 50 °C → alarme
-
+#define LEVEL_HIGH 50
 #define REPORT_TASK_DELAY_MS 3000
 
-extern QueueHandle_t xLevelQueue;
+extern QueueHandle_t     xLevelQueue;
 extern SemaphoreHandle_t xUARTMutex;
 extern SemaphoreHandle_t xBufferMutex;
 extern SemaphoreHandle_t xEmergencySemaphore;
 
-// Buffer compartilhado entre tarefa de controle (escritor) e tarefa UART (leitor).
-// Protegido por xBufferMutex — leituras/escritas sao compostas (struct),
-// portanto exigem exclusao mutua explicita.
 static TempBuffer_t g_xBuffer = { 0, 0, TEMP_STATUS_OK };
 
-// Software Timer callback — recurso FreeRTOS não visto em aula (T2)
+/* Executado pelo Timer Service Task a cada 5 s. Tenta adquirir xUARTMutex com
+   timeout de 100 ms; se obtido, envia mensagem de heartbeat e libera o mutex.
+   Se o mutex nao estiver disponivel, a mensagem e descartada para nao bloquear
+   o agendador de timers. */
 void vWatchdogTimerCallback(TimerHandle_t xTimer) {
     (void)xTimer;
+
     if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
         UART_SendString("[WATCHDOG] Sistema ativo.\r\n");
         xSemaphoreGive(xUARTMutex);
     }
 }
 
-// Tarefa de controle: recebe temperatura da fila, atualiza buffer compartilhado,
-// aciona tarefa de alarme via semáforo quando temperatura > LEVEL_HIGH.
+/* Bloqueia em xLevelQueue ate receber uma leitura de temperatura. Classifica o
+   valor contra LEVEL_HIGH e atualiza o LED imediatamente. Em seguida adquire
+   xBufferMutex, grava temperatura, timestamp e status em g_xBuffer e libera o
+   mutex. Se o status for TEMP_STATUS_ALTA, envia alerta pela UART sob
+   xUARTMutex e da xEmergencySemaphore para despertar vTask_EmergencyHandler. */
 void vTask_ControlLogic(void *pvParameters) {
     (void)pvParameters;
     uint16_t uiReceivedTemp;
@@ -53,7 +55,6 @@ void vTask_ControlLogic(void *pvParameters) {
                 LED_Status_Alto(OFF);
             }
 
-            // Escrita no buffer compartilhado sob exclusao mutua
             if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
                 g_xBuffer.temperatura = uiReceivedTemp;
                 g_xBuffer.timestamp   = xTaskGetTickCount();
@@ -72,7 +73,12 @@ void vTask_ControlLogic(void *pvParameters) {
     }
 }
 
-// Tarefa UART: lê buffer compartilhado e envia temperatura ao monitor serial.
+/* Executa a cada 3 s via vTaskDelayUntil para manter periodo fixo independente
+   do tempo de execucao. Adquire xBufferMutex, copia g_xBuffer para um snapshot
+   local e libera o mutex imediatamente. Converte o campo status em string,
+   formata a linha com temperatura e timestamp via sprintf e envia o relatorio
+   completo pela UART sob xUARTMutex. Pula o ciclo se nao conseguir adquirir
+   xBufferMutex. */
 void vTask_ReportStatus(void *pvParameters) {
     TickType_t xLastWakeTime = xTaskGetTickCount();
     const TickType_t xFrequency = pdMS_TO_TICKS(REPORT_TASK_DELAY_MS);
@@ -86,8 +92,6 @@ void vTask_ReportStatus(void *pvParameters) {
     for (;;) {
         vTaskDelayUntil(&xLastWakeTime, xFrequency);
 
-        // Tira um snapshot do buffer compartilhado sob mutex,
-        // libera rapidamente e formata fora da secao critica.
         if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
             xSnapshot = g_xBuffer;
             xSemaphoreGive(xBufferMutex);
@@ -114,7 +118,10 @@ void vTask_ReportStatus(void *pvParameters) {
     }
 }
 
-// Tarefa ADC: lê sensor e envia à tarefa de controle via fila de mensagens.
+/* Executa a cada 500 ms. Chama ADC1_ReadTemperature para converter a tensao do
+   LM35 em graus Celsius e envia o valor a xLevelQueue via xQueueSend. Se a
+   fila estiver cheia, bloqueia ate haver espaco. Apos o envio, suspende a
+   tarefa por 500 ms via vTaskDelay antes de iniciar o proximo ciclo. */
 void vTask_ReadLevel(void *pvParameters) {
     const TickType_t xSampleDelay = pdMS_TO_TICKS(500);
     uint16_t uiTempReading = 0;
@@ -123,12 +130,18 @@ void vTask_ReadLevel(void *pvParameters) {
 
     for (;;) {
         uiTempReading = ADC1_ReadTemperature();
+
         xQueueSend(xLevelQueue, &uiTempReading, portMAX_DELAY);
+
         vTaskDelay(xSampleDelay);
     }
 }
 
-// Tarefa de alarme: inicia bloqueada no semáforo; desbloqueada somente pela tarefa de controle.
+/* Bloqueia indefinidamente em xEmergencySemaphore. Ao ser desbloqueada por
+   vTask_ControlLogic, executa a sequencia de alarme: pisca o LED RB15 tres
+   vezes com intervalo de 100 ms entre cada estado. Em seguida chama
+   xQueueReset para descartar amostras acumuladas em xLevelQueue durante o
+   alarme. Por fim, adquire xUARTMutex e envia mensagem de alarme critico. */
 void vTask_EmergencyHandler(void *pvParameters) {
     const TickType_t xMutexWaitTicks = pdMS_TO_TICKS(200);
 
@@ -136,6 +149,7 @@ void vTask_EmergencyHandler(void *pvParameters) {
 
     for (;;) {
         if (xSemaphoreTake(xEmergencySemaphore, portMAX_DELAY) == pdTRUE) {
+
             for (int i = 0; i < 3; i++) {
                 LED_Status_Alto(ON);
                 vTaskDelay(pdMS_TO_TICKS(100));
