@@ -10,9 +10,6 @@
 #include <stdio.h>
 #include "timers.h"
 
-#define LEVEL_HIGH 50
-#define REPORT_TASK_DELAY_MS 3000
-
 extern QueueHandle_t     xLevelQueue;
 extern SemaphoreHandle_t xUARTMutex;
 extern SemaphoreHandle_t xBufferMutex;
@@ -51,7 +48,7 @@ void vTask_ControlLogic(void *pvParameters) {
 
         uint8_t uiStatus;
 
-        if (uiReceivedTemp > LEVEL_HIGH) {
+        if (uiReceivedTemp > 50) {
             uiStatus = TEMP_STATUS_ALTA;
             LED_Status_Alto(ON);
         } else {
@@ -91,7 +88,7 @@ void vTask_ReportStatus(void *pvParameters) {
     (void)pvParameters;
 
     for (;;) {
-        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(REPORT_TASK_DELAY_MS));
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(3000));
 
         if (xSemaphoreTake(xBufferMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
             xSnapshot = g_xBuffer;
