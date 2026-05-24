@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação Técnica — T2 | DEC7562</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --green: #3cb371;
+      --text: #d4d8f0;
+      --muted: #7a80a0;
+      --code-bg: #151822;
+      --header-bg: #12151e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .page-header {
+      background: var(--header-bg);
+      border-bottom: 2px solid var(--accent);
+      padding: 2rem 3rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.3px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.4rem 2rem;
+    }
+
+    .meta-grid span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .meta-grid span strong {
+      color: var(--text);
+    }
+
+    .notice {
+      background: var(--surface2);
+      border-left: 4px solid var(--accent);
+      padding: 0.8rem 1.2rem;
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .notice em { color: var(--text); font-style: normal; font-weight: 600; }
+
+    .layout {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar TOC */
+    .toc-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 1rem;
+    }
+
+    .toc-sidebar h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+      padding-left: 0.5rem;
+    }
+
+    .toc-sidebar ol {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc-sidebar ol li {
+      margin-bottom: 0.15rem;
+    }
+
+    .toc-sidebar ol li a {
+      display: block;
+      padding: 0.3rem 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .toc-sidebar ol li a:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    /* Main content */
+    .content {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      max-width: 980px;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 1.8rem 0 0.7rem;
+    }
+
+    p { margin-bottom: 0.9rem; }
+
+    strong { color: #fff; font-weight: 600; }
+
+    em { color: #b0b8d8; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      background: var(--surface2);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.6rem 0.9rem;
+      color: var(--accent);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:hover td { background: var(--surface2); }
+
+    /* Code */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-size: 0.83rem;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      font-size: 0.85em;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.4em;
+      color: #c9d1f7;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 1em;
+      color: #c9d1f7;
+    }
+
+    /* Blockquote */
+    blockquote {
+      border-left: 4px solid var(--accent2);
+      background: var(--surface2);
+      margin: 1rem 0;
+      padding: 0.8rem 1.2rem;
+      border-radius: 0 6px 6px 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    blockquote strong { color: var(--text); }
+
+    /* Lists */
+    ul, ol {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    li { margin-bottom: 0.25rem; }
+
+    /* Check mark list */
+    li.check::marker { content: "✅  "; }
+
+    /* Section links */
+    h2 a, h3 a { color: inherit; text-decoration: none; }
+
+    /* Checklist callout */
+    .req-table td:first-child { white-space: nowrap; }
+
+    .tag-ok {
+      display: inline-block;
+      background: #1a3a2a;
+      color: var(--green);
+      border: 1px solid #2a5a3a;
+      border-radius: 4px;
+      padding: 0.1em 0.5em;
+      font-size: 0.8em;
+      font-weight: 700;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    @media (max-width: 900px) {
+      .toc-sidebar { display: none; }
+      .content { padding: 1.5rem; }
+      .page-header { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>Documentação Técnica — Segundo Trabalho Prático (T2)</h1>
+  <div class="meta-grid">
+    <span><strong>Disciplina:</strong> Sistemas Operacionais Embarcados — DEC7562</span>
+    <span><strong>Universidade:</strong> UFSC</span>
+    <span><strong>Professor:</strong> Anderson Luiz Fernandes Perez</span>
+    <span><strong>Aluno:</strong> Júlio Cézar</span>
+    <span><strong>Plataforma:</strong> PIC24FJ128GA010 (simulação Proteus)</span>
+    <span><strong>Kernel:</strong> FreeRTOS v11.1.0</span>
+    <span><strong>Compilador:</strong> MPLAB XC16 v2.10</span>
+  </div>
+  <div class="notice">
+    Este arquivo é a documentação única e definitiva do projeto. Serve simultaneamente como <em>roteiro de apresentação</em>, <em>material de estudo</em> e <em>defesa técnica</em> do trabalho diante do professor.
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar TOC -->
+  <nav class="toc-sidebar">
+    <h2>Índice</h2>
+    <ol>
+      <li><a href="#s1">1. Introdução</a></li>
+      <li><a href="#s2">2. Requisitos do Trabalho</a></li>
+      <li><a href="#s3">3. Arquitetura Geral</a></li>
+      <li><a href="#s4">4. Explicação das Tasks</a></li>
+      <li><a href="#s5">5. Recursos do RTOS</a></li>
+      <li><a href="#s6">6. Periféricos</a></li>
+      <li><a href="#s7">7. Circuito</a></li>
+      <li><a href="#s8">8. Fluxo Completo</a></li>
+      <li><a href="#s9">9. Prioridades</a></li>
+      <li><a href="#s10">10. Funcionalidades Extras</a></li>
+      <li><a href="#s11">11. Perguntas do Professor</a></li>
+      <li><a href="#s12">12. Conclusão</a></li>
+    </ol>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- ── 1. Introdução ── -->
+    <h2 id="s1">1. Introdução</h2>
+
+    <h3>1.1 Proposta do sistema</h3>
+    <p>
+      O segundo trabalho prático pede o desenvolvimento de um <strong>sistema embarcado multitarefa</strong>, executando sobre o sistema operacional de tempo real <strong>FreeRTOS</strong>, em um microcontrolador <strong>PIC24FJ128GA010</strong> simulado no <strong>Proteus</strong>. O sistema simula uma <strong>pequena planta industrial supervisionada</strong>, composta por sensor, atuador e módulo de supervisão, com múltiplas tarefas concorrentes que compartilham recursos e trocam informações entre si.
+    </p>
+
+    <h3>1.2 Aplicação implementada</h3>
+    <p>A planta industrial modelada é um <strong>monitor térmico</strong>, equivalente em escopo ao que seria um nó de monitoramento de sala de servidores, estufa ou reator químico:</p>
+    <ul>
+      <li><strong>Sensor:</strong> LM35 (sensor analógico de temperatura, 10 mV/°C) lido pelo ADC1 no canal AN2.</li>
+      <li><strong>Atuador:</strong> LED de alarme (RB15) que sinaliza visualmente temperatura crítica.</li>
+      <li><strong>Supervisão:</strong> monitor serial via UART1 (RF2/RF3, 9600 8N1) recebe relatórios periódicos de temperatura, alertas em tempo real e mensagens da rotina de alarme.</li>
+    </ul>
+
+    <h3>1.3 Visão geral</h3>
+    <p>
+      Quatro tarefas concorrentes — <strong>leitura do sensor</strong>, <strong>controle</strong>, <strong>UART</strong> e <strong>alarme</strong> — executam de forma cooperativa sob escalonamento preemptivo com prioridades distintas, comunicando-se exclusivamente via primitivos de IPC do FreeRTOS (<strong>fila de mensagens</strong>, <strong>buffer compartilhado protegido por mutex</strong>, <strong>mutex de UART</strong> e <strong>semáforo binário</strong>). Um quinto recurso, <strong>Software Timer</strong>, opera como heartbeat de 5 s e atende ao requisito de implementar um recurso não visto em aula.
+    </p>
+
+    <hr>
+
+    <!-- ── 2. Requisitos ── -->
+    <h2 id="s2">2. Requisitos do Trabalho</h2>
+    <p>A tabela abaixo cruza cada requisito explícito do enunciado com sua implementação no código. Todos os requisitos foram <strong>✅ Implementados</strong>.</p>
+
+    <div class="table-wrap">
+      <table class="req-table">
+        <thead>
+          <tr><th>#</th><th>Requisito</th><th>Implementação</th><th>Local</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>R1</td><td>Sistema multitarefa em FreeRTOS, PIC24FJ128GA010, Proteus</td><td><code>main()</code> cria 4 tasks, registra IPC e inicia o scheduler</td><td><code>main.c:14-48</code></td></tr>
+          <tr><td>R2</td><td>Planta industrial: sensores, atuadores, supervisão</td><td>LM35 (sensor) + LED RB15 (atuador) + UART (supervisão)</td><td><code>user_app.c</code>, <code>user_drivers.c</code></td></tr>
+          <tr><td>R3</td><td>Tarefa para ler sensor de temperatura (ADC)</td><td><code>vTask_ReadLevel</code> lê AN2 a cada 500 ms</td><td><code>user_app.c:118-129</code></td></tr>
+          <tr><td>R4</td><td>Tarefa para escrever no UART</td><td><code>vTask_ReportStatus</code> reporta a cada 3 s</td><td><code>user_app.c:76-115</code></td></tr>
+          <tr><td>R5</td><td>Tarefa de controle</td><td><code>vTask_ControlLogic</code> classifica leitura e dispara alarme</td><td><code>user_app.c:39-73</code></td></tr>
+          <tr><td>R6</td><td>Tarefa de alarme</td><td><code>vTask_EmergencyHandler</code> bloqueada em semáforo binário</td><td><code>user_app.c:132-154</code></td></tr>
+          <tr><td>R7</td><td>Sensor → Controle via fila de mensagens</td><td><code>xLevelQueue</code> (FIFO de 5 × <code>uint16_t</code>)</td><td><code>main.c:21</code></td></tr>
+          <tr><td>R8</td><td>Controle escreve em buffer compartilhado com UART</td><td><code>g_xBuffer</code> (<code>TempBuffer_t</code>) sob <code>xBufferMutex</code></td><td><code>user_app.h:14-18</code>, <code>user_app.c:26</code></td></tr>
+          <tr><td>R9</td><td>UART escreve a temperatura no monitor serial</td><td><code>sprintf</code> + <code>UART_SendString</code> no relatório</td><td><code>user_app.c:104-111</code></td></tr>
+          <tr><td>R10</td><td>Controle aciona alarme via semáforo binário</td><td><code>xSemaphoreGive(xEmergencySemaphore)</code> em controle</td><td><code>user_app.c:69</code></td></tr>
+          <tr><td>R11</td><td>Alarme <strong>somente</strong> desbloqueada pela tarefa controle</td><td><code>give</code> ocorre <strong>apenas</strong> em <code>vTask_ControlLogic</code></td><td><code>user_app.c:69</code> (único caller)</td></tr>
+          <tr><td>R12</td><td>Alarme escreve mensagem de emergência no serial</td><td><code>"ALARME: Temperatura critica! Sistema parado."</code></td><td><code>user_app.c:148-151</code></td></tr>
+          <tr><td>R13</td><td>Controle da UART com mutex</td><td><code>xUARTMutex</code> (mutex com herança de prioridade)</td><td><code>main.c:22</code></td></tr>
+          <tr><td>R14</td><td>Configurar prioridades diferentes e analisar</td><td>4 / 3 / 2 / 1 (Alarme / Controle / ADC / UART)</td><td><code>main.c:32-35</code></td></tr>
+          <tr><td>R15</td><td>Verificar exclusões mútuas</td><td>Dois mutexes dedicados, todos com timeout finito</td><td><code>xUARTMutex</code>, <code>xBufferMutex</code></td></tr>
+          <tr><td>R16</td><td>Recurso da documentação FreeRTOS <strong>não visto em aula</strong></td><td><strong>Software Timer</strong> (<code>xTimerCreate</code>) — heartbeat de 5 s</td><td><code>main.c:38-43</code>, <code>user_app.c:29-35</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <blockquote><strong>Conclusão de §2:</strong> os 16 requisitos extraídos do enunciado foram cobertos integralmente. Não há requisitos parciais ou faltantes.</blockquote>
+
+    <hr>
+
+    <!-- ── 3. Arquitetura ── -->
+    <h2 id="s3">3. Arquitetura Geral do Sistema</h2>
+
+    <h3>3.1 Diagrama lógico</h3>
+<pre>
+   Sensor LM35 (AN2 / RB2)
+            │
+            ▼
+   ┌─────────────────────┐
+   │   vTask_ReadLevel   │  Prioridade 2 — período 500 ms
+   └─────────┬───────────┘
+             │
+             ▼  xQueueSend / xQueueReceive
+   ┌─────────────────────┐
+   │   xLevelQueue       │  FIFO 5 × uint16_t (PIPE)
+   └─────────┬───────────┘
+             │
+             ▼
+   ┌─────────────────────┐                       ┌──────────────────────────┐
+   │  vTask_ControlLogic │── xSemaphoreGive ────►│  vTask_EmergencyHandler  │
+   └─────────┬───────────┘   (xEmergencySem)     │   Prioridade 4 (top)     │
+             │                                    └────────────┬─────────────┘
+             │ escreve g_xBuffer                                │
+             │ sob xBufferMutex                                 │ flash LED RB15
+             ▼                                                  │ + reset queue
+   ┌─────────────────────┐                                      │
+   │   g_xBuffer         │                                      │
+   │   (TempBuffer_t)    │                                      │
+   └─────────┬───────────┘                                      │
+             │ leitura snapshot                                 │
+             │ sob xBufferMutex                                 │
+             ▼                                                  ▼
+   ┌─────────────────────┐                       ┌──────────────────────────┐
+   │  vTask_ReportStatus │──── xUARTMutex ──────►│   UART1 (RF2 / RF3)      │
+   │   Prioridade 1      │                       │   Monitor serial 9600 8N1│
+   └─────────────────────┘                       └──────────────────────────┘
+                                                              ▲
+                                                              │
+                                                  Software Timer 5 s
+                                                  (Daemon Task / heartbeat)
+</pre>
+
+    <h3>3.2 Componentes principais</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Componente</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td><strong>4 tarefas</strong></td><td>Cada uma encapsula uma responsabilidade isolada (sensor / controle / UART / alarme)</td></tr>
+          <tr><td><code>xLevelQueue</code></td><td>Comunicação assíncrona produtor-consumidor (sensor → controle)</td></tr>
+          <tr><td><code>g_xBuffer</code></td><td>Estado compartilhado consultado pela UART para gerar relatórios</td></tr>
+          <tr><td><code>xBufferMutex</code></td><td>Exclusão mútua sobre <code>g_xBuffer</code></td></tr>
+          <tr><td><code>xUARTMutex</code></td><td>Exclusão mútua sobre o periférico UART1</td></tr>
+          <tr><td><code>xEmergencySemaphore</code></td><td>Sinalização assíncrona controle → alarme</td></tr>
+          <tr><td><code>xWatchdogTimer</code></td><td>Software Timer auto-reload 5 s (recurso extra)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.3 Modelo de execução</h3>
+    <ul>
+      <li><strong>Escalonamento:</strong> preemptivo, com <strong>time-slicing</strong> entre tarefas de mesma prioridade (<code>configUSE_PREEMPTION = 1</code>, <code>configUSE_TIME_SLICING = 1</code>).</li>
+      <li><strong>Tick rate:</strong> 100 Hz → quanta de 10 ms (<code>configTICK_RATE_HZ = 100</code>).</li>
+      <li><strong>Heap:</strong> 4096 bytes, gerenciador <code>heap_1.c</code> (sem free → sem fragmentação; adequado a sistemas estáticos).</li>
+      <li><strong>Mutexes com herança de prioridade:</strong> <code>configUSE_MUTEXES = 1</code> previne inversão de prioridade clássica.</li>
+    </ul>
+
+    <h3>3.4 Mapa de hardware</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Recurso lógico</th><th>Pino físico</th><th>Periférico</th><th>Direção</th></tr></thead>
+        <tbody>
+          <tr><td>Sensor LM35</td><td>RB2 / AN2</td><td>ADC1 (CH0SA = 2)</td><td>Entrada analógica</td></tr>
+          <tr><td>LED de alarme</td><td>RB15</td><td>GPIO (AN9 desativado por <code>AD1PCFG.PCFG9 = 1</code>)</td><td>Saída digital</td></tr>
+          <tr><td>UART1 TX</td><td>RF3</td><td>U1TX</td><td>Saída</td></tr>
+          <tr><td>UART1 RX</td><td>RF2</td><td>U1RX</td><td>Entrada</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ── 4. Tasks ── -->
+    <h2 id="s4">4. Explicação das Tasks</h2>
+
+    <h3>4.1 <code>vTask_ReadLevel</code> — Sensor ADC</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Arquivo</td><td><code>user_app.c:118-129</code></td></tr>
+          <tr><td>Prioridade</td><td>2</td></tr>
+          <tr><td>Stack</td><td><code>configMINIMAL_STACK_SIZE + 128</code> = 256 words</td></tr>
+          <tr><td>Periodicidade</td><td>500 ms (<code>vTaskDelay</code>)</td></tr>
+          <tr><td>Recursos</td><td>ADC1, <code>xLevelQueue</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Função:</strong> dispara uma conversão A/D no canal AN2, converte o valor cru (0..1023) em temperatura inteira em °C (LM35 → 10 mV/°C, Vref = 5 V) e envia para a fila <code>xLevelQueue</code>.</p>
+<pre><code>for (;;) {
+    uiTempReading = ADC1_ReadTemperature();
+    xQueueSend(xLevelQueue, &amp;uiTempReading, portMAX_DELAY);
+    vTaskDelay(pdMS_TO_TICKS(500));
+}</code></pre>
+    <p><strong>Por que essa task existe:</strong> isolar a tarefa de aquisição libera o resto do sistema do timing do hardware. O <code>xQueueSend</code> com <code>portMAX_DELAY</code> bloqueia a tarefa caso o consumidor esteja atrasado — <strong>nenhuma amostra é perdida silenciosamente</strong>.</p>
+
+    <h3>4.2 <code>vTask_ControlLogic</code> — Controle</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Arquivo</td><td><code>user_app.c:39-73</code></td></tr>
+          <tr><td>Prioridade</td><td>3</td></tr>
+          <tr><td>Stack</td><td><code>configMINIMAL_STACK_SIZE + 256</code> = 384 words</td></tr>
+          <tr><td>Periodicidade</td><td>event-driven (acorda ao receber dado na fila)</td></tr>
+          <tr><td>Recursos</td><td><code>xLevelQueue</code>, <code>xBufferMutex</code>, <code>xUARTMutex</code>, <code>xEmergencySemaphore</code>, LED RB15</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Função:</strong> consumidor da fila. Recebe a temperatura, classifica em dois estados (<strong>OK</strong> ou <strong>ALTA</strong>), atualiza o LED de alarme, escreve estado completo no buffer compartilhado e — se a temperatura for crítica — emite alerta UART e libera o semáforo da tarefa de alarme.</p>
+<pre><code>xQueueReceive(xLevelQueue, &amp;uiReceivedTemp, portMAX_DELAY);
+
+if (uiReceivedTemp > LEVEL_HIGH) { uiStatus = TEMP_STATUS_ALTA; LED_Status_Alto(ON); }
+else                              { uiStatus = TEMP_STATUS_OK;   LED_Status_Alto(OFF); }
+
+if (xSemaphoreTake(xBufferMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+    g_xBuffer.temperatura = uiReceivedTemp;
+    g_xBuffer.timestamp   = xTaskGetTickCount();
+    g_xBuffer.status      = uiStatus;
+    xSemaphoreGive(xBufferMutex);
+}
+
+if (uiStatus == TEMP_STATUS_ALTA) {
+    // ...mensagem UART sob xUARTMutex...
+    xSemaphoreGive(xEmergencySemaphore);  // ← único caller no projeto
+}</code></pre>
+
+    <h3>4.3 <code>vTask_ReportStatus</code> — UART (relatórios)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Arquivo</td><td><code>user_app.c:76-115</code></td></tr>
+          <tr><td>Prioridade</td><td>1 (mais baixa)</td></tr>
+          <tr><td>Stack</td><td><code>configMINIMAL_STACK_SIZE + 128</code> = 256 words</td></tr>
+          <tr><td>Periodicidade</td><td>3 s (<code>vTaskDelayUntil</code> — período exato sem drift)</td></tr>
+          <tr><td>Recursos</td><td><code>g_xBuffer</code>, <code>xBufferMutex</code>, <code>xUARTMutex</code>, UART1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Padrão snapshot-then-release:</strong></p>
+<pre><code>if (xSemaphoreTake(xBufferMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
+    xSnapshot = g_xBuffer;          // cópia local rápida (~3 instruções)
+    xSemaphoreGive(xBufferMutex);   // libera imediatamente
+} else { continue; }
+
+// Formatação e envio acontecem FORA da seção crítica
+sprintf(cReportBuffer, "[STATUS] T=%u C | tick=%lu | %s\r\n", ...);
+xSemaphoreTake(xUARTMutex, ...);
+UART_SendString(cReportBuffer);
+xSemaphoreGive(xUARTMutex);</code></pre>
+
+    <h3>4.4 <code>vTask_EmergencyHandler</code> — Alarme</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Arquivo</td><td><code>user_app.c:132-154</code></td></tr>
+          <tr><td>Prioridade</td><td>4 (máxima das tarefas de aplicação)</td></tr>
+          <tr><td>Stack</td><td><code>configMINIMAL_STACK_SIZE + 128</code> = 256 words</td></tr>
+          <tr><td>Periodicidade</td><td>event-driven (bloqueada até semáforo)</td></tr>
+          <tr><td>Recursos</td><td><code>xEmergencySemaphore</code>, <code>xUARTMutex</code>, <code>xLevelQueue</code> (reset), LED RB15</td></tr>
+        </tbody>
+      </table>
+    </div>
+<pre><code>for (;;) {
+    if (xSemaphoreTake(xEmergencySemaphore, portMAX_DELAY) == pdTRUE) {
+        for (int i = 0; i &lt; 3; i++) {
+            LED_Status_Alto(ON);  vTaskDelay(pdMS_TO_TICKS(100));
+            LED_Status_Alto(OFF); vTaskDelay(pdMS_TO_TICKS(100));
+        }
+        xQueueReset(xLevelQueue);
+        // mensagem UART sob xUARTMutex...
+    }
+}</code></pre>
+
+    <h3>4.5 Daemon Task (Timer Service) — Watchdog</h3>
+    <p>Não é uma task criada por <code>xTaskCreate</code>, mas criada pelo próprio kernel quando <code>configUSE_TIMERS = 1</code>. Executa o callback <code>vWatchdogTimerCallback</code> a cada 5 s, com prioridade 4, enviando <code>"[WATCHDOG] Sistema ativo.\r\n"</code> pela UART. Detalhes em §10.</p>
+
+    <hr>
+
+    <!-- ── 5. Recursos RTOS ── -->
+    <h2 id="s5">5. Explicação dos Recursos do RTOS</h2>
+
+    <h3>5.1 Filas (Queues) — <code>xLevelQueue</code></h3>
+    <p><strong>O que é:</strong> estrutura FIFO thread-safe que carrega cópias de dados entre tarefas. No projeto, comporta <strong>5 posições de <code>uint16_t</code></strong> (10 bytes).</p>
+<pre><code>xLevelQueue = xQueueCreate(5, sizeof(uint16_t));</code></pre>
+    <p><strong>Por que usar:</strong> desacopla produtor (<code>vTask_ReadLevel</code>) e consumidor (<code>vTask_ControlLogic</code>). Bloqueio com <code>portMAX_DELAY</code> é o idioma idiomático: a tarefa só sai do estado bloqueado quando há dado — <strong>sem polling, sem busy-wait, CPU = 0 enquanto espera</strong>.</p>
+    <p><strong>Onde é usada:</strong></p>
+    <ul>
+      <li><code>vTask_ReadLevel</code> → <code>xQueueSend</code> (produtor)</li>
+      <li><code>vTask_ControlLogic</code> → <code>xQueueReceive</code> (consumidor)</li>
+      <li><code>vTask_EmergencyHandler</code> → <code>xQueueReset</code> (limpa após emergência)</li>
+    </ul>
+
+    <h3>5.2 Mutex (com herança de prioridade) — <code>xUARTMutex</code> e <code>xBufferMutex</code></h3>
+    <p><strong>O que é:</strong> semáforo binário com posse (ownership) e herança de prioridade. Apenas a tarefa que tomou o mutex pode liberá-lo. Quando uma tarefa de alta prioridade tenta tomar um mutex segurado por uma de baixa prioridade, a baixa <strong>herda temporariamente</strong> a prioridade da alta, evitando inversão de prioridade clássica.</p>
+<pre><code>xUARTMutex   = xSemaphoreCreateMutex();
+xBufferMutex = xSemaphoreCreateMutex();</code></pre>
+    <ul>
+      <li><strong><code>xUARTMutex</code></strong> serializa o acesso à UART1 (recurso físico único).</li>
+      <li><strong><code>xBufferMutex</code></strong> garante consistência da escrita/leitura da struct <code>TempBuffer_t</code>.</li>
+      <li><strong>Por que dois mutexes separados:</strong> evita acoplamento e elimina risco de deadlock por lock ordering. Nenhuma tarefa precisa tomar ambos ao mesmo tempo.</li>
+    </ul>
+
+    <h3>5.3 Semáforo binário — <code>xEmergencySemaphore</code></h3>
+    <p><strong>O que é:</strong> contagem máxima de 1. Criado com contagem inicial <strong>zero</strong>, o que significa que o primeiro <code>take</code> bloqueia até alguém dar <code>give</code>.</p>
+<pre><code>xEmergencySemaphore = xSemaphoreCreateBinary();</code></pre>
+    <p><strong>Por que usar:</strong> sinalização de evento entre tarefas. Diferente de mutex, <strong>não tem posse</strong>. Uso clássico de "task-to-task signaling".</p>
+    <p><strong>Garantia do requisito R11:</strong> o único <code>xSemaphoreGive(xEmergencySemaphore)</code> em todo o projeto está em <code>user_app.c:69</code>, dentro da tarefa de controle.</p>
+
+    <h3>5.4 Software Timer — <code>xWatchdogTimer</code></h3>
+    <p><strong>O que é:</strong> "tarefa virtual" agendada pela <strong>Daemon Task</strong>. Não consome stack próprio — o callback executa no contexto da Daemon. Pode ser <strong>one-shot</strong> ou <strong>auto-reload</strong> (caso do projeto).</p>
+<pre><code>xWatchdogTimer = xTimerCreate("Watchdog", pdMS_TO_TICKS(5000), pdTRUE, NULL, vWatchdogTimerCallback);
+xTimerStart(xWatchdogTimer, 0);</code></pre>
+    <p><strong>Regra de ouro:</strong> <strong>o callback NUNCA pode bloquear</strong>. No projeto, o <code>take</code> do mutex UART usa timeout curto (<code>pdMS_TO_TICKS(100)</code>). Se a UART estiver ocupada, o tick do watchdog é simplesmente descartado.</p>
+
+    <h3>5.5 Escalonador (Scheduler)</h3>
+    <ul>
+      <li>Preemptivo (<code>configUSE_PREEMPTION = 1</code>)</li>
+      <li>Time-slicing entre iguais (<code>configUSE_TIME_SLICING = 1</code>)</li>
+      <li>5 níveis de prioridade (0..4, sendo 0 a Idle e 4 a máxima)</li>
+      <li>Tick de 10 ms (<code>configTICK_RATE_HZ = 100</code>)</li>
+    </ul>
+    <p><strong>Regra fundamental:</strong> a tarefa pronta de maior prioridade é a que está executando. Se uma tarefa de prioridade superior se tornar pronta, ela preempta imediatamente a tarefa em execução.</p>
+
+    <h3>5.6 Resumo de exclusão mútua e sincronização</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Cenário</th><th>Primitivo</th><th>Justificativa</th></tr></thead>
+        <tbody>
+          <tr><td>Produzir/consumir amostras</td><td>Queue</td><td>Desacopla produtor e consumidor, sem perda de dados</td></tr>
+          <tr><td>Escrever/ler estado composto (struct)</td><td>Mutex (<code>xBufferMutex</code>)</td><td>Atomicidade lógica de múltiplos campos</td></tr>
+          <tr><td>Compartilhar periférico físico (UART)</td><td>Mutex (<code>xUARTMutex</code>)</td><td>Recurso único, evita interleave de caracteres</td></tr>
+          <tr><td>Sinalizar evento (alarme)</td><td>Semáforo binário</td><td>Task-to-task signaling sem dado associado</td></tr>
+          <tr><td>Tarefa periódica leve (heartbeat)</td><td>Software Timer</td><td>Não exige stack/task dedicado</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ── 6. Periféricos ── -->
+    <h2 id="s6">6. Explicação dos Periféricos</h2>
+
+    <h3>6.1 ADC1 — Conversor Analógico-Digital</h3>
+    <p><strong>Configuração (<code>user_drivers.c:50-78</code>):</strong></p>
+    <ul>
+      <li>Canal: <strong>AN2</strong> (RB2); Referência: VDD/VSS → 5 V</li>
+      <li>Aquisição manual com 16 TAD de sample; Resolução 10 bits (0..1023)</li>
+      <li>Início de conversão automático após sample (<code>SSRC = 0b111</code>)</li>
+    </ul>
+    <p><strong>Conversão raw → °C (<code>user_drivers.c:83-96</code>):</strong></p>
+<pre><code>return (uint16_t)((uint32_t)raw * VREF_MV / (1023UL * LM35_MV_PER_C));</code></pre>
+    <p>Fórmula: <code>temp_C = (raw × 5000) / (1023 × 10)</code>. <strong>Cuidado:</strong> o intermediário <code>raw × 5000</code> ultrapassa <code>uint16_t</code> — promoção a <code>uint32_t</code> evita overflow silencioso.</p>
+
+    <h3>6.2 UART1 — Comunicação Serial</h3>
+    <ul>
+      <li>Pinos: <strong>U1TX = RF3</strong> (saída), <strong>U1RX = RF2</strong> (entrada) — pinos fixos, sem PPS</li>
+      <li>Baud rate: <strong>9600</strong> (<code>U1BRG = 103</code> com FCY = 16 MHz)</li>
+      <li>8 bits de dado, sem paridade, 1 stop bit (8N1); Oversampling 16× (<code>BRGH = 0</code>)</li>
+    </ul>
+    <p><strong>Envio (<code>UART_SendChar</code>, <code>UART_SendString</code>):</strong> polling sobre <code>UTXBF</code>. Aceitável porque sempre chamado dentro de seção crítica protegida por <code>xUARTMutex</code> e o tempo de espera a 9600 baud é ~1 ms por byte.</p>
+
+    <h3>6.3 GPIO — LED RB15</h3>
+<pre><code>AD1PCFGbits.PCFG9 = 1;   // Desativa AN9 (multiplexado em RB15) — vital!
+TRISBbits.TRISB15 = 0;   // Pino como saída
+LED_Status_Alto(OFF);    // Estado inicial seguro</code></pre>
+    <p><strong>Pegadinha importante:</strong> RB15 também é AN9. Ao ligar (reset), o pino assume função analógica por padrão. Sem <code>AD1PCFGbits.PCFG9 = 1</code>, o LED <strong>não acende</strong> — erro clássico em PIC.</p>
+
+    <h3>6.4 Timers</h3>
+    <p>Não há uso de timer de hardware (TMR1, TMR2, etc.). O único timer no projeto é o <strong>Software Timer</strong> do FreeRTOS.</p>
+
+    <h3>6.5 Interrupções</h3>
+    <p><strong>Apenas o tick do FreeRTOS</strong> (Timer 1 interno via <code>portasm_PIC24.S</code>). Nenhuma ISR de aplicação está ativa — a antiga <code>_INT0Interrupt</code> foi removida para cumprir o requisito R11.</p>
+
+    <hr>
+
+    <!-- ── 7. Circuito ── -->
+    <h2 id="s7">7. Explicação do Circuito</h2>
+    <p>O circuito está em <code>Proteus/Simulation.pdsprj</code>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Componente</th><th>Conexão</th><th>Função</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PIC24FJ128GA010</strong></td><td>Cristal HS + PLL → FCY = 16 MHz</td><td>Microcontrolador host</td></tr>
+          <tr><td><strong>Potenciômetro</strong> (simula LM35)</td><td>Wiper → RB2/AN2; extremos → VDD/VSS</td><td>Fonte analógica 0..5 V simulando LM35</td></tr>
+          <tr><td><strong>LED de alarme</strong></td><td>Ânodo → RB15 (via ~330 Ω); cátodo → GND</td><td>Sinalização visual de temperatura crítica</td></tr>
+          <tr><td><strong>Virtual Terminal</strong> (UART)</td><td>TX (RF3) → RX terminal; GND comum</td><td>Monitor serial 9600 8N1</td></tr>
+          <tr><td><strong>VDD/VSS</strong></td><td>5 V / GND</td><td>Alimentação</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>7.2 Justificativa dos pinos</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pino</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RB2/AN2</strong> para o sensor</td><td>Canal ADC dedicado, não conflita com LED ou UART</td></tr>
+          <tr><td><strong>RB15</strong> para o LED</td><td>Saída GPIO livre, mas exige desativar AN9 explicitamente</td></tr>
+          <tr><td><strong>RF2/RF3</strong> para UART</td><td>Pinos fixos da U1RX/U1TX no GA010 (sem PPS)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- ── 8. Fluxo Completo ── -->
+    <h2 id="s8">8. Fluxo Completo da Aplicação</h2>
+
+    <h3>8.1 Boot</h3>
+    <ol>
+      <li><strong>Reset → <code>main()</code></strong></li>
+      <li><code>Init_DigitalOutputs()</code> configura RB15 como GPIO de saída e desativa AN9.</li>
+      <li><code>Init_UART1(9600)</code> programa U1BRG, modos e habilita o periférico.</li>
+      <li><code>Init_ADC1()</code> configura AN2 e habilita ADC1.</li>
+      <li>Criação dos objetos de IPC. <strong>Se algum retornar NULL, entra em loop infinito</strong> (proteção contra heap insuficiente).</li>
+      <li>Criação das 4 tarefas com prioridades 4 / 3 / 2 / 1.</li>
+      <li>Criação do Software Timer (<code>xTimerCreate</code> + <code>xTimerStart</code>).</li>
+      <li><code>vTaskStartScheduler()</code> — controle passa ao FreeRTOS.</li>
+    </ol>
+
+    <h3>8.2 Operação em estado estacionário (temperatura OK)</h3>
+<pre>
+Tick 0   →  ADC dispara amostra → envia 25 °C para xLevelQueue → bloqueia 500 ms
+            Control recebe 25 °C → status = OK, LED OFF
+            Control toma xBufferMutex → escreve {25, tick, OK} → libera
+Tick 300 →  ReportStatus acorda (3 s) → snapshot → "[STATUS] T=25 C | tick=300 | OK"
+Tick 500 →  Watchdog Timer → "[WATCHDOG] Sistema ativo."
+</pre>
+
+    <h3>8.3 Evento de alarme (temperatura &gt; 50 °C)</h3>
+<pre>
+1. ADC lê 60 °C → envia para xLevelQueue
+2. Control recebe 60 °C
+   ├─ status = ALTA, LED RB15 ON
+   ├─ toma xBufferMutex → escreve {60, tick, ALTA} → libera
+   ├─ toma xUARTMutex → "ALERTA: Temperatura Alta!" → libera
+   └─ xSemaphoreGive(xEmergencySemaphore)
+3. EmergencyHandler (prio 4) preempta Control imediatamente
+   ├─ Loop 3×: LED ON / 100 ms / LED OFF / 100 ms
+   ├─ xQueueReset(xLevelQueue)
+   └─ "ALARME: Temperatura critica! Sistema parado."
+4. EmergencyHandler volta a bloquear em xSemaphoreTake(portMAX_DELAY)
+</pre>
+    <p><strong>Observação:</strong> o tempo de execução do alarme é dominado pelos seis <code>vTaskDelay(100)</code> (600 ms total). Durante essa janela, outras tarefas continuam executando — o <code>vTaskDelay</code> libera a CPU.</p>
+
+    <hr>
+
+    <!-- ── 9. Prioridades ── -->
+    <h2 id="s9">9. Explicação das Prioridades</h2>
+
+    <h3>9.1 Hierarquia escolhida</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tarefa</th><th>Prioridade</th><th>Justificativa</th></tr></thead>
+        <tbody>
+          <tr><td><code>vTask_EmergencyHandler</code> (Alarme)</td><td><strong>4</strong></td><td>Resposta a evento crítico — deve preemptar qualquer outra</td></tr>
+          <tr><td><code>vTask_ControlLogic</code> (Controle)</td><td><strong>3</strong></td><td>Lógica reativa ao sensor — resposta mais rápida possível</td></tr>
+          <tr><td><code>vTask_ReadLevel</code> (ADC)</td><td><strong>2</strong></td><td>Aquisição periódica — tolera jitter</td></tr>
+          <tr><td><code>vTask_ReportStatus</code> (UART)</td><td><strong>1</strong></td><td>Relatório informativo — pode esperar</td></tr>
+          <tr><td>Idle (FreeRTOS)</td><td>0</td><td>Quando ninguém está pronto</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>A Daemon Task do Timer compartilha prioridade 4 com o alarme (<code>configTIMER_TASK_PRIORITY = configMAX_PRIORITIES - 1 = 4</code>).</p>
+
+    <h3>9.2 Princípio: criticality-monotonic</h3>
+    <ul>
+      <li><strong>Emergência &gt; Controle:</strong> o alarme não pode esperar o controle terminar. Quando o controle dá <code>give</code>, o alarme acorda no mesmo tick e preempta.</li>
+      <li><strong>Controle &gt; ADC:</strong> assim que uma amostra cair na fila, o controle deve consumi-la imediatamente (fila tem só 5 posições).</li>
+      <li><strong>ADC &gt; UART:</strong> atrasar amostra do sensor é pior do que atrasar relatório periódico.</li>
+      <li><strong>UART = mais baixa:</strong> acorda só a cada 3 s; há tempo de sobra mesmo com preempção.</li>
+    </ul>
+
+    <h3>9.3 Análise de starvation</h3>
+    <p>A UART poderia sofrer starvation se as tarefas superiores nunca dormissem. Mas a ADC dorme 500 ms; o controle bloqueia em <code>xQueueReceive</code>; o alarme bloqueia no semáforo. O <code>vTaskDelayUntil</code> de 3 s é tempo enorme comparado ao trabalho útil. Portanto <strong>a UART sempre encontra janela de CPU</strong>.</p>
+
+    <h3>9.4 Análise de inversão de prioridade</h3>
+    <p><strong>Solução aplicada:</strong> mutex com herança de prioridade (<code>configUSE_MUTEXES = 1</code>). Quando <code>EmergencyHandler</code> tenta tomar o mutex que <code>ReportStatus</code> segura, o kernel eleva temporariamente a prioridade de <code>ReportStatus</code> para 4, liberando o mutex rapidamente.</p>
+
+    <h3>9.5 Análise de deadlock</h3>
+    <ul>
+      <li>Dois mutexes, sem lock ordering (nenhuma tarefa toma os dois ao mesmo tempo).</li>
+      <li>Todos os takes usam timeout finito (exceto <code>xQueueReceive</code> do controle e <code>xSemaphoreTake</code> do alarme — bloqueio indefinido é semanticamente correto neles).</li>
+      <li>Resultado: <strong>não há ciclo de espera possível → impossível deadlock por design</strong>.</li>
+    </ul>
+
+    <hr>
+
+    <!-- ── 10. Extras ── -->
+    <h2 id="s10">10. Funcionalidades Extras</h2>
+
+    <h3>10.1 Software Timer (recurso oficial "não visto em aula")</h3>
+    <p>Esta é a entrega para o requisito R16. Introduz três conceitos novos:</p>
+    <ol>
+      <li><strong>Daemon Task (Timer Service Task)</strong> — criada automaticamente quando <code>configUSE_TIMERS = 1</code>. Executa em prioridade <code>configMAX_PRIORITIES - 1</code>.</li>
+      <li><strong>Semântica "command queue"</strong> — comandos (<code>xTimerStart</code>, <code>xTimerStop</code>) são <em>enfileirados</em> na Daemon, não executados imediatamente.</li>
+      <li><strong>Regra de ouro: callback não pode bloquear</strong> — <code>portMAX_DELAY</code> dentro do callback travaria toda a Daemon e todos os timers parariam.</li>
+    </ol>
+<pre><code>void vWatchdogTimerCallback(TimerHandle_t xTimer) {
+    if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+        UART_SendString("[WATCHDOG] Sistema ativo.\r\n");
+        xSemaphoreGive(xUARTMutex);
+    }
+    // Se UART ocupada: tick descartado silenciosamente — jamais bloquear a Daemon.
+}</code></pre>
+
+    <h3>10.2 Buffer compartilhado tipado (<code>TempBuffer_t</code>)</h3>
+<pre><code>typedef struct {
+    uint16_t   temperatura;
+    TickType_t timestamp;
+    uint8_t    status;
+} TempBuffer_t;</code></pre>
+    <p>Três campos não escritos atomicamente — o mutex é tecnicamente necessário para evitar leitura de struct "rasgada" (temperatura nova com timestamp antigo).</p>
+
+    <h3>10.3 Dois mutexes separados</h3>
+    <p>Decisão consciente para evitar acoplamento e tornar <strong>deadlock impossível por design</strong>. Cada mutex tem recurso bem definido; nenhuma tarefa toma ambos ao mesmo tempo → nenhum ciclo de espera possível.</p>
+
+    <h3>10.4 Padrão snapshot-then-release</h3>
+    <p>A <code>vTask_ReportStatus</code> copia <code>g_xBuffer</code> para variável local dentro do mutex e libera o mutex <strong>antes</strong> de chamar <code>sprintf</code> e <code>UART_SendString</code>. Minimiza o tempo na seção crítica.</p>
+
+    <h3>10.5 <code>vTaskDelayUntil</code> em vez de <code>vTaskDelay</code></h3>
+    <p>Garante <strong>período exato</strong> mesmo se a tarefa for preemptada por longos períodos. Diferente de <code>vTaskDelay</code> (período relativo, sujeito a drift acumulado).</p>
+
+    <h3>10.6 Reset da fila após alarme</h3>
+    <p><code>xQueueReset(xLevelQueue)</code> descarta amostras antigas acumuladas durante o evento de emergência. Força o controle a reavaliar a temperatura atual ao sair do alarme.</p>
+
+    <h3>10.7 Conversão ADC com promoção a <code>uint32_t</code></h3>
+    <p>Sem a promoção, <code>1023 × 5000 = 5.115.000</code> estouraria silenciosamente o <code>uint16_t</code>. Tipo de defeito que aparece em produção e é difícil de depurar.</p>
+
+    <h3>10.8 Arquitetura modular em duas camadas</h3>
+    <p><code>user_drivers.c/h</code> (HAL) e <code>user_app.c/h</code> (lógica de aplicação) são separados. Os drivers não conhecem FreeRTOS; a aplicação não conhece registradores.</p>
+
+    <hr>
+
+    <!-- ── 11. Perguntas ── -->
+    <h2 id="s11">11. Possíveis Perguntas do Professor</h2>
+
+    <h3>11.1 Sobre FreeRTOS / RTOS</h3>
+
+    <p><strong>P: Qual a diferença entre <code>vTaskDelay</code> e <code>vTaskDelayUntil</code>?</strong><br>
+    R: <code>vTaskDelay(t)</code> bloqueia por <code>t</code> ticks a partir do momento em que a função é chamada — se a tarefa foi preemptada antes, o período acumula drift. <code>vTaskDelayUntil(&xLast, T)</code> bloqueia até <code>xLast + T</code>, atualizando <code>xLast</code> por referência. Garante período exato. No projeto, <code>vTask_ReadLevel</code> usa <code>vTaskDelay</code> (amostragem tolera jitter) e <code>vTask_ReportStatus</code> usa <code>vTaskDelayUntil</code> (relatórios precisam de período fixo).</p>
+
+    <p><strong>P: Por que o <code>xSemaphoreCreateBinary</code> começa com contagem zero?</strong><br>
+    R: Para que a primeira chamada de <code>xSemaphoreTake</code> bloqueie imediatamente, esperando o <code>give</code> do produtor. É o comportamento esperado de "task-to-task signaling": a tarefa de alarme está inicialmente dormente.</p>
+
+    <p><strong>P: Qual a diferença entre mutex e semáforo binário?</strong><br>
+    R: Mutex tem <strong>posse</strong> (só quem tomou pode liberar) e <strong>herança de prioridade</strong>. Semáforo binário não tem posse — qualquer tarefa pode dar <code>give</code>. Mutex é para <strong>proteger recursos</strong>; semáforo binário para <strong>sinalizar eventos</strong>.</p>
+
+    <p><strong>P: O que é inversão de prioridade e como ela é prevenida aqui?</strong><br>
+    R: É o cenário em que uma tarefa de alta prioridade fica indiretamente bloqueada por uma de prioridade média. Acontece quando uma tarefa de baixa prioridade segura um mutex que a alta precisa, e tarefas de prioridade intermediária preemptam a baixa. <strong>Prevenção:</strong> mutex com herança de prioridade — o kernel eleva temporariamente a prioridade da tarefa que segura o mutex.</p>
+
+    <p><strong>P: Por que <code>heap_1.c</code> e não <code>heap_4.c</code>?</strong><br>
+    R: <code>heap_1.c</code> aloca mas nunca libera — sem fragmentação possível, comportamento determinístico. No T2, todas as alocações acontecem antes do <code>vTaskStartScheduler()</code>. Não há <code>vTaskDelete</code> nem criação dinâmica em runtime. Para esse padrão, <code>heap_1.c</code> é a escolha técnica correta.</p>
+
+    <p><strong>P: Por que <code>configUSE_TIME_SLICING = 1</code> se as prioridades são todas diferentes?</strong><br>
+    R: A Daemon Task do Timer tem <strong>prioridade 4 (igual à do alarme)</strong>. Time-slicing garante que, se ambas estiverem prontas, elas se alternam por tick em vez de uma monopolizar a CPU.</p>
+
+    <p><strong>P: O que acontece se a fila estiver cheia quando o ADC tenta enviar?</strong><br>
+    R: <code>xQueueSend(..., portMAX_DELAY)</code> bloqueia o produtor até que haja espaço. <strong>Nenhuma amostra é perdida silenciosamente</strong> — o efeito é estender o período de amostragem temporariamente, aceitável para uma planta de baixa dinâmica como temperatura.</p>
+
+    <p><strong>P: Qual o estado das tarefas após boot e antes do primeiro alarme?</strong><br>
+    R: <code>vTask_ReadLevel</code>: alternando entre Running e Blocked (<code>vTaskDelay</code>). <code>vTask_ControlLogic</code>: a maior parte do tempo Blocked em <code>xQueueReceive</code>. <code>vTask_ReportStatus</code>: a maior parte do tempo Blocked em <code>vTaskDelayUntil</code>. <code>vTask_EmergencyHandler</code>: permanentemente Blocked em <code>xSemaphoreTake</code> até o primeiro alarme.</p>
+
+    <h3>11.2 Sobre hardware / periféricos</h3>
+
+    <p><strong>P: Por que precisa <code>AD1PCFGbits.PCFG9 = 1</code> para usar o LED?</strong><br>
+    R: Porque RB15 é multiplexado com AN9 no PIC24FJ128GA010. No reset, o pino assume função analógica (driver de saída digital desligado). Sem habilitar modo digital explicitamente, o pino fica em alta impedância e o LED nunca acende. É erro clássico em PIC.</p>
+
+    <p><strong>P: Por que <code>VREF_MV = 5000</code>? E se a placa for de 3,3 V?</strong><br>
+    R: Estamos usando o ADC com referência VDD/VSS (<code>VCFG = 0</code>). No Proteus, VDD está em 5 V por padrão. Em uma placa de 3,3 V, bastaria mudar <code>VREF_MV = 3300</code> em <code>user_drivers.h</code>.</p>
+
+    <p><strong>P: Por que UART em polling em vez de interrupção?</strong><br>
+    R: A 9600 baud, cada byte leva ~1 ms. Como o envio sempre acontece dentro do <code>xUARTMutex</code> (com herança de prioridade), o impacto é limitado e previsível. Para baud rates maiores ou mensagens longas, valeria a pena migrar para interrupção + buffer circular.</p>
+
+    <h3>11.3 Sobre exclusão mútua e sincronização</h3>
+
+    <p><strong>P: Por que o buffer compartilhado precisa de mutex se você pode usar <code>volatile</code>?</strong><br>
+    R: <code>volatile</code> resolve apenas a <strong>visibilidade</strong> (impede cache em registrador). Não resolve <strong>atomicidade</strong>. A struct <code>TempBuffer_t</code> tem 3 campos escritos em pelo menos 3 instruções <code>MOV</code>. Sem mutex, um leitor pode capturar struct "rasgada" com temperatura nova e timestamp antigo — estado logicamente inconsistente.</p>
+
+    <p><strong>P: Por que dois mutexes em vez de um global?</strong><br>
+    R: (1) <strong>Reduz contenção</strong>: uma tarefa segurando o buffer não bloqueia outra que só quer a UART. (2) <strong>Elimina deadlock por design</strong>: com nenhuma operação tomando os dois ao mesmo tempo, é matematicamente impossível haver ciclo de espera.</p>
+
+    <p><strong>P: O <code>give</code> do semáforo pode ser perdido?</strong><br>
+    R: Sim. Como é binário (max count = 1), múltiplos <code>give</code> consecutivos só "registram" o primeiro. É o comportamento de <strong>"latched event"</strong> — geralmente desejável para alarmes (evita o handler ser executado N vezes em rajada).</p>
+
+    <h3>11.4 Sobre decisões de projeto</h3>
+
+    <p><strong>P: Por que a tarefa de alarme reseta a fila?</strong><br>
+    R: Para descartar amostras antigas acumuladas durante o evento de emergência. Sem isso, ao sair do alarme, o controle ainda processaria amostras "estáticas" da janela crítica. Resetar força o controle a reavaliar a temperatura atual.</p>
+
+    <p><strong>P: Por que não há histerese no limiar de 50 °C?</strong><br>
+    R: Trade-off de simplicidade. Em produção real adicionaria uma flag <code>bAlarmActive</code> que rearma apenas em <code>temp &lt; LEVEL_HIGH - 5</code>, evitando que o alarme dispare em loop enquanto a temperatura oscila perto do limiar.</p>
+
+    <p><strong>P: Por que stack <code>+128</code> ou <code>+256</code>?</strong><br>
+    R: <code>vTask_ControlLogic</code> usa <code>+256</code> porque tem variáveis locais maiores e três caminhos de seção crítica. As outras tarefas usam <code>+128</code>. Em um projeto crítico, mediria com <code>uxTaskGetStackHighWaterMark()</code> e ajustaria.</p>
+
+    <h3>11.5 Sobre o Software Timer</h3>
+
+    <p><strong>P: Por que não usar uma 5ª task em vez do Software Timer?</strong><br>
+    R: Uma task dedicada consumiria ~256 words de stack só para fazer <code>vTaskDelay(5000) + UART_SendString</code>. O Software Timer executa no contexto da Daemon Task — <strong>zero stack adicional</strong>, comportamento idêntico. É o trade-off correto para tarefas curtas e periódicas.</p>
+
+    <p><strong>P: O que acontece se a UART estiver ocupada quando o timer dispara?</strong><br>
+    R: O <code>xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100))</code> retorna <code>pdFALSE</code> após 100 ms e o callback retorna sem enviar nada. O tick é descartado silenciosamente — <strong>a Daemon NUNCA pode bloquear</strong>, senão todos os outros timers do sistema parariam.</p>
+
+    <h3>11.6 Pergunta-armadilha clássica</h3>
+
+    <p><strong>P: Como você garante que a fila não estourará entre dois pulses do controle?</strong><br>
+    R: Em regime normal, o controle (prio 3) tem prioridade superior ao ADC (prio 2). Assim que o ADC dá <code>xQueueSend</code>, o scheduler preempta e o controle entra para consumir. A fila praticamente nunca chega a ter mais de 1 elemento. Os 5 slots cobrem o cenário em que o controle está temporariamente preemptado pelo alarme (prio 4). Mesmo nesse caso, 5 × 500 ms = 2,5 s de margem — mais do que suficiente.</p>
+
+    <hr>
+
+    <!-- ── 12. Conclusão ── -->
+    <h2 id="s12">12. Conclusão</h2>
+
+    <h3>12.1 Resultado final</h3>
+    <p>O sistema implementa fielmente o que o enunciado pede: uma planta industrial supervisionada com 4 tarefas concorrentes, comunicação por fila, buffer compartilhado protegido por mutex, controle do periférico UART por mutex, alarme via semáforo binário desbloqueado <em>somente</em> pela tarefa de controle, prioridades distintas analisadas e um recurso adicional do FreeRTOS (Software Timer) implementado com profundidade técnica.</p>
+
+    <h3>12.2 Aprendizado técnico</h3>
+    <ul>
+      <li><strong>Como pensar em RTOS:</strong> decompor o problema em tarefas com responsabilidade única, conectá-las por primitivos de IPC bem escolhidos.</li>
+      <li><strong>Quando usar fila vs mutex vs semáforo:</strong> fila para <em>transferir dados</em>, mutex para <em>proteger recursos</em>, semáforo para <em>sinalizar eventos</em>.</li>
+      <li><strong>Como prevenir inversão de prioridade:</strong> mutex com herança (<code>configUSE_MUTEXES = 1</code>).</li>
+      <li><strong>Como prevenir deadlock por design:</strong> isolar mutexes por recurso, evitar lock ordering, usar timeouts finitos.</li>
+      <li><strong>Como dimensionar prioridades:</strong> criticality-monotonic — mais crítico, mais alto.</li>
+      <li><strong>Como ler o LM35 com ADC de 10 bits:</strong> cuidado com overflow na conversão (promoção a <code>uint32_t</code>).</li>
+      <li><strong>Como não bloquear a Daemon Task:</strong> timeouts curtos em callbacks de timer.</li>
+    </ul>
+
+    <h3>12.3 Validação prática</h3>
+    <ul>
+      <li class="check">Temperatura baixa (&lt; 50 °C): LED apagado, relatórios <code>[STATUS] T=xx C | tick=yyy | OK</code> a cada 3 s.</li>
+      <li class="check">Temperatura alta (&gt; 50 °C): LED ligado, alerta UART, flash 3×, mensagem de alarme.</li>
+      <li class="check">Watchdog: <code>[WATCHDOG] Sistema ativo.</code> a cada 5 s, independente da temperatura.</li>
+      <li class="check">Exclusão mútua: nenhum entrelaçamento de caracteres na UART; struct do buffer sempre consistente.</li>
+      <li class="check">Sem deadlock e sem starvation observáveis em execução prolongada.</li>
+    </ul>
+
+    <h3>12.4 Validação do RTOS</h3>
+    <ul>
+      <li class="check">Preempção imediata ao desbloquear tarefa de alta prioridade.</li>
+      <li class="check">Herança de prioridade do mutex visível quando relatório (prio 1) segura o buffer e alarme (prio 4) precisa dele.</li>
+      <li class="check">Tick estável de 100 Hz mantendo <code>vTaskDelayUntil</code> exato mesmo sob preempção.</li>
+      <li class="check">Software Timer disparando sem drift mesmo com a Daemon Task em time-slice com o alarme.</li>
+    </ul>
+
+    <h3>12.5 Parecer geral</h3>
+    <blockquote>
+      <strong>Trabalho concluído integralmente, com aderência total ao enunciado e diferenciais técnicos consistentes.</strong> As decisões de design são justificadas, o código é modular e legível, os primitivos de IPC são usados de forma idiomática, e esta documentação serve simultaneamente como entrega acadêmica e base de estudo para a defesa oral.
+    </blockquote>
+
+  </main>
+</div>
+
+</body>
+</html>

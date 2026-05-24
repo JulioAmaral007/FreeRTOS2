@@ -20,16 +20,20 @@ extern SemaphoreHandle_t xEmergencySemaphore;
 
 static TempBuffer_t g_xBuffer = { 0, 0, TEMP_STATUS_OK };
 
-/* Executado pelo Timer Service Task a cada 5 s. Tenta adquirir xUARTMutex com
-   timeout de 100 ms; se obtido, envia mensagem de heartbeat e libera o mutex.
-   Se o mutex nao estiver disponivel, a mensagem e descartada para nao bloquear
-   o agendador de timers. */
-void vWatchdogTimerCallback(TimerHandle_t xTimer) {
-    (void)xTimer;
+/* Executa a cada 500 ms. Chama ADC1_ReadTemperature para converter a tensao do
+   LM35 em graus Celsius e envia o valor a xLevelQueue via xQueueSend. Se a
+   fila estiver cheia, bloqueia ate haver espaco. Apos o envio, suspende a
+   tarefa por 500 ms via vTaskDelay antes de iniciar o proximo ciclo. */
+void vTask_ReadLevel(void *pvParameters) {
+    uint16_t uiTempReading = 0;
+    (void)pvParameters;
 
-    if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
-        UART_SendString("[WATCHDOG] Sistema ativo.\r\n");
-        xSemaphoreGive(xUARTMutex);
+    for (;;) {
+        uiTempReading = ADC1_ReadTemperature();
+
+        xQueueSend(xLevelQueue, &uiTempReading, portMAX_DELAY);
+
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
@@ -41,34 +45,33 @@ void vWatchdogTimerCallback(TimerHandle_t xTimer) {
 void vTask_ControlLogic(void *pvParameters) {
     (void)pvParameters;
     uint16_t uiReceivedTemp;
-    const TickType_t xMutexWaitTicks = pdMS_TO_TICKS(100);
 
     for (;;) {
-        if (xQueueReceive(xLevelQueue, &uiReceivedTemp, portMAX_DELAY) == pdPASS) {
-            uint8_t uiStatus;
+        xQueueReceive(xLevelQueue, &uiReceivedTemp, portMAX_DELAY);
 
-            if (uiReceivedTemp > LEVEL_HIGH) {
-                uiStatus = TEMP_STATUS_ALTA;
-                LED_Status_Alto(ON);
-            } else {
-                uiStatus = TEMP_STATUS_OK;
-                LED_Status_Alto(OFF);
-            }
+        uint8_t uiStatus;
 
-            if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
-                g_xBuffer.temperatura = uiReceivedTemp;
-                g_xBuffer.timestamp   = xTaskGetTickCount();
-                g_xBuffer.status      = uiStatus;
-                xSemaphoreGive(xBufferMutex);
-            }
+        if (uiReceivedTemp > LEVEL_HIGH) {
+            uiStatus = TEMP_STATUS_ALTA;
+            LED_Status_Alto(ON);
+        } else {
+            uiStatus = TEMP_STATUS_OK;
+            LED_Status_Alto(OFF);
+        }
 
-            if (uiStatus == TEMP_STATUS_ALTA) {
-                if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
-                    UART_SendString("\nALERTA: Temperatura Alta!\r\n");
-                    xSemaphoreGive(xUARTMutex);
-                }
-                xSemaphoreGive(xEmergencySemaphore);
+        if (xSemaphoreTake(xBufferMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+            g_xBuffer.temperatura = uiReceivedTemp;
+            g_xBuffer.timestamp   = xTaskGetTickCount();
+            g_xBuffer.status      = uiStatus;
+            xSemaphoreGive(xBufferMutex);
+        }
+
+        if (uiStatus == TEMP_STATUS_ALTA) {
+            if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+                UART_SendString("\nALERTA: Temperatura Alta!\r\n");
+                xSemaphoreGive(xUARTMutex);
             }
+            xSemaphoreGive(xEmergencySemaphore);
         }
     }
 }
@@ -81,8 +84,6 @@ void vTask_ControlLogic(void *pvParameters) {
    xBufferMutex. */
 void vTask_ReportStatus(void *pvParameters) {
     TickType_t xLastWakeTime = xTaskGetTickCount();
-    const TickType_t xFrequency = pdMS_TO_TICKS(REPORT_TASK_DELAY_MS);
-    const TickType_t xMutexWaitTicks = pdMS_TO_TICKS(1000);
     char cReportBuffer[80];
     TempBuffer_t xSnapshot;
     const char *pcStatusStr;
@@ -90,9 +91,9 @@ void vTask_ReportStatus(void *pvParameters) {
     (void)pvParameters;
 
     for (;;) {
-        vTaskDelayUntil(&xLastWakeTime, xFrequency);
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(REPORT_TASK_DELAY_MS));
 
-        if (xSemaphoreTake(xBufferMutex, xMutexWaitTicks) == pdTRUE) {
+        if (xSemaphoreTake(xBufferMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
             xSnapshot = g_xBuffer;
             xSemaphoreGive(xBufferMutex);
         } else {
@@ -100,11 +101,15 @@ void vTask_ReportStatus(void *pvParameters) {
         }
 
         switch (xSnapshot.status) {
-            case TEMP_STATUS_ALTA: pcStatusStr = "ALTA"; break;
-            default:               pcStatusStr = "OK";   break;
+            case TEMP_STATUS_ALTA: 
+                pcStatusStr = "ALTA"; 
+                break;
+            default:               
+                pcStatusStr = "OK";   
+                break;
         }
 
-        if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
+        if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
             sprintf(cReportBuffer,
                     "[STATUS] T=%u C | tick=%lu | %s\r\n",
                     xSnapshot.temperatura,
@@ -118,33 +123,12 @@ void vTask_ReportStatus(void *pvParameters) {
     }
 }
 
-/* Executa a cada 500 ms. Chama ADC1_ReadTemperature para converter a tensao do
-   LM35 em graus Celsius e envia o valor a xLevelQueue via xQueueSend. Se a
-   fila estiver cheia, bloqueia ate haver espaco. Apos o envio, suspende a
-   tarefa por 500 ms via vTaskDelay antes de iniciar o proximo ciclo. */
-void vTask_ReadLevel(void *pvParameters) {
-    const TickType_t xSampleDelay = pdMS_TO_TICKS(500);
-    uint16_t uiTempReading = 0;
-
-    (void)pvParameters;
-
-    for (;;) {
-        uiTempReading = ADC1_ReadTemperature();
-
-        xQueueSend(xLevelQueue, &uiTempReading, portMAX_DELAY);
-
-        vTaskDelay(xSampleDelay);
-    }
-}
-
 /* Bloqueia indefinidamente em xEmergencySemaphore. Ao ser desbloqueada por
    vTask_ControlLogic, executa a sequencia de alarme: pisca o LED RB15 tres
    vezes com intervalo de 100 ms entre cada estado. Em seguida chama
    xQueueReset para descartar amostras acumuladas em xLevelQueue durante o
    alarme. Por fim, adquire xUARTMutex e envia mensagem de alarme critico. */
 void vTask_EmergencyHandler(void *pvParameters) {
-    const TickType_t xMutexWaitTicks = pdMS_TO_TICKS(200);
-
     (void)pvParameters;
 
     for (;;) {
@@ -159,10 +143,23 @@ void vTask_EmergencyHandler(void *pvParameters) {
 
             xQueueReset(xLevelQueue);
 
-            if (xSemaphoreTake(xUARTMutex, xMutexWaitTicks) == pdTRUE) {
+            if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(200)) == pdTRUE) {
                 UART_SendString("\nALARME: Temperatura critica! Sistema parado.\r\n");
                 xSemaphoreGive(xUARTMutex);
             }
         }
+    }
+}
+
+/* Executado pelo Timer Service Task a cada 5 s. Tenta adquirir xUARTMutex com
+   timeout de 100 ms; se obtido, envia mensagem de heartbeat e libera o mutex.
+   Se o mutex nao estiver disponivel, a mensagem e descartada para nao bloquear
+   o agendador de timers. */
+void vWatchdogTimerCallback(TimerHandle_t xTimer) {
+    (void)xTimer;
+
+    if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+        UART_SendString("[WATCHDOG] Sistema ativo.\r\n");
+        xSemaphoreGive(xUARTMutex);
     }
 }
