@@ -21,18 +21,12 @@ int main() {
     xBufferMutex        = xSemaphoreCreateMutex();
     xEmergencySemaphore = xSemaphoreCreateBinary();
 
-    if (xLevelQueue == NULL || xUARTMutex == NULL ||
-        xBufferMutex == NULL || xEmergencySemaphore == NULL) {
-        while(1);
-    }
-
-    // Tarefas — prioridades distintas para análise de escalonamento (T2)
     xTaskCreate(vTask_EmergencyHandler, "Alarm",   configMINIMAL_STACK_SIZE + 128, NULL, 4, NULL);
     xTaskCreate(vTask_ControlLogic,     "Control", configMINIMAL_STACK_SIZE + 256, NULL, 3, NULL);
     xTaskCreate(vTask_ReadLevel,        "ADC",     configMINIMAL_STACK_SIZE + 128, NULL, 2, NULL);
     xTaskCreate(vTask_ReportStatus,     "UART",    configMINIMAL_STACK_SIZE + 128, NULL, 1, NULL);
 
-    // Software Timer — recurso FreeRTOS não visto em aula (T2)
+    // Software Timer 
     TimerHandle_t xWatchdogTimer = xTimerCreate(
         "Watchdog", pdMS_TO_TICKS(5000), pdTRUE, NULL, vWatchdogTimerCallback
     );
