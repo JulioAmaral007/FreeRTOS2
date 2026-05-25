@@ -37,8 +37,9 @@ void vTask_ReadLevel(void *pvParameters) {
 /* Bloqueia em xLevelQueue ate receber uma leitura de temperatura. Classifica o
    valor contra LEVEL_HIGH e atualiza o LED imediatamente. Em seguida adquire
    xBufferMutex, grava temperatura, timestamp e status em g_xBuffer e libera o
-   mutex. Se o status for TEMP_STATUS_ALTA, envia alerta pela UART sob
-   xUARTMutex e da xEmergencySemaphore para despertar vTask_EmergencyHandler. */
+   mutex. Se o status for TEMP_STATUS_ALTA, da xEmergencySemaphore para
+   despertar vTask_EmergencyHandler, que e a unica tarefa responsavel por
+   emitir a mensagem de emergencia pela UART. */
 void vTask_ControlLogic(void *pvParameters) {
     (void)pvParameters;
     uint16_t uiReceivedTemp;
@@ -64,10 +65,6 @@ void vTask_ControlLogic(void *pvParameters) {
         }
 
         if (uiStatus == TEMP_STATUS_ALTA) {
-            if (xSemaphoreTake(xUARTMutex, pdMS_TO_TICKS(100)) == pdTRUE) {
-                UART_SendString("\nALERTA: Temperatura Alta!\r\n");
-                xSemaphoreGive(xUARTMutex);
-            }
             xSemaphoreGive(xEmergencySemaphore);
         }
     }
