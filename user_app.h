@@ -12,9 +12,8 @@
 // Buffer compartilhado entre tarefa de controle (escritor) e tarefa UART (leitor).
 // Acesso protegido por xBufferMutex.
 typedef struct {
-    uint16_t   temperatura;  // ultima leitura em graus Celsius
-    TickType_t timestamp;    // tick em que a amostra foi escrita
-    uint8_t    status;       // TEMP_STATUS_*
+    uint16_t temperatura;  // ultima leitura em graus Celsius
+    uint8_t  status;       // TEMP_STATUS_*
 } TempBuffer_t;
 
 void vTask_ControlLogic(void *pvParameters);

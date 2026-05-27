@@ -35,6 +35,4 @@ int main() {
     }
 
     vTaskStartScheduler();
-
-    while (1);
 }
