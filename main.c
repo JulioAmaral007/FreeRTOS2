@@ -21,6 +21,11 @@ int main() {
     xBufferMutex        = xSemaphoreCreateMutex();
     xEmergencySemaphore = xSemaphoreCreateBinary();
 
+    if (xLevelQueue == NULL || xUARTMutex == NULL || xBufferMutex == NULL || xEmergencySemaphore == NULL) {
+        // Erro na criação de objetos, travar aqui
+        while(1);
+    }
+
     xTaskCreate(vTask_EmergencyHandler, "Alarm",   configMINIMAL_STACK_SIZE + 128, NULL, 4, NULL);
     xTaskCreate(vTask_ControlLogic,     "Control", configMINIMAL_STACK_SIZE + 256, NULL, 3, NULL);
     xTaskCreate(vTask_ReadLevel,        "ADC",     configMINIMAL_STACK_SIZE + 128, NULL, 2, NULL);
@@ -35,4 +40,8 @@ int main() {
     }
 
     vTaskStartScheduler();
+
+    while (1);
+    
+    return 0;
 }

@@ -129,11 +129,11 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0xea8          0x15fc  (5628)
 .const                      0x10a8                0xfe           0x17d  (381)
-.text                       0x11a6              0x5170          0x7a28  (31272)
-.dinit                      0x6316                0x5a            0x87  (135)
-.text                       0x6370                0x50            0x78  (120)
+.text                       0x11a6              0x5186          0x7a49  (31305)
+.dinit                      0x632c                0x5a            0x87  (135)
+.text                       0x6386                0x50            0x78  (120)
 
-                 Total "program" memory used (bytes):         0x92a0  (37536) 28%
+                 Total "program" memory used (bytes):         0x92c1  (37569) 28%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
@@ -381,7 +381,7 @@ External Symbols in Program Memory (by address):
                   0x006274                  _xPortGetFreeHeapSize
                   0x006280                  _vPortHeapResetState
                   0x006288                  _main
-                  0x006370                  _vPortYield
+                  0x006386                  _vPortYield
 
 External Symbols in Program Memory (by name):
 
@@ -471,7 +471,7 @@ External Symbols in Program Memory (by name):
                   0x00624e                  _vPortFree
                   0x006280                  _vPortHeapResetState
                   0x00626c                  _vPortInitialiseBlocks
-                  0x006370                  _vPortYield
+                  0x006386                  _vPortYield
                   0x0040c4                  _vQueueDelete
                   0x004356                  _vQueueWaitForMessageRestricted
                   0x0045d0                  _vStreamBufferDelete
@@ -832,7 +832,7 @@ __CONFIG1
  .debug_abbrev    0x00116b         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
  .debug_abbrev    0x00117f         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
 
-.debug_line       0x000000       0x1b00
+.debug_line       0x000000       0x1b03
  *(.debug_line)
  .debug_line      0x000000         0x1a build/default/production/croutine.o
  .debug_line      0x00001a        0x22f build/default/production/event_groups.o
@@ -842,16 +842,16 @@ __CONFIG1
  .debug_line      0x0008d6        0x325 build/default/production/stream_buffer.o
  .debug_line      0x000bfb        0x66d build/default/production/tasks.o
  .debug_line      0x001268        0x2c1 build/default/production/timers.o
- .debug_line      0x001529         0xc4 build/default/production/main.o
- .debug_line      0x0015ed        0x111 build/default/production/user_app.o
- .debug_line      0x0016fe         0x62 build/default/production/portasm_PIC24.o
- .debug_line      0x001760        0x12a build/default/production/heap_1.o
- .debug_line      0x00188a        0x13a build/default/production/user_drivers.o
- .debug_line      0x0019c4         0x1a build/default/production/config_bits.o
- .debug_line      0x0019de         0x45 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
- .debug_line      0x001a23         0x59 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
- .debug_line      0x001a7c         0x4a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
- .debug_line      0x001ac6         0x3a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
+ .debug_line      0x001529         0xc7 build/default/production/main.o
+ .debug_line      0x0015f0        0x111 build/default/production/user_app.o
+ .debug_line      0x001701         0x62 build/default/production/portasm_PIC24.o
+ .debug_line      0x001763        0x12a build/default/production/heap_1.o
+ .debug_line      0x00188d        0x13a build/default/production/user_drivers.o
+ .debug_line      0x0019c7         0x1a build/default/production/config_bits.o
+ .debug_line      0x0019e1         0x45 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+ .debug_line      0x001a26         0x59 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(extendsfdf.XX_o)
+ .debug_line      0x001a7f         0x4a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(funpack.XX_o)
+ .debug_line      0x001ac9         0x3a c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(mulsi3.XX_o)
 
 .debug_frame      0x000000       0x1506
  *(.debug_frame)
@@ -1686,7 +1686,7 @@ __c30_signature
  .const             0x9196          0x8 build/default/production/tasks.o
  .const             0x919e          0x8 build/default/production/timers.o
 
-.text             0x0011a6       0x5170
+.text             0x0011a6       0x5186
  .text            0x0011a6       0x21a6 build/default/production/tasks.o
                   0x001244                  _xTaskCreateStatic
                   0x0012e0                  _xTaskCreate
@@ -1854,12 +1854,12 @@ __c30_signature
                   0x00626c                  _vPortInitialiseBlocks
                   0x006274                  _xPortGetFreeHeapSize
                   0x006280                  _vPortHeapResetState
- .text            0x006288         0x8e build/default/production/main.o
+ .text            0x006288         0xa4 build/default/production/main.o
                   0x006288                  _main
 
-.dinit            0x006316         0x5a
- .dinit           0x006316         0x5a data_init
+.dinit            0x00632c         0x5a
+ .dinit           0x00632c         0x5a data_init
 
-.text             0x006370         0x50
- .text            0x006370         0x50 build/default/production/portasm_PIC24.o
-                  0x006370                  _vPortYield
+.text             0x006386         0x50
+ .text            0x006386         0x50 build/default/production/portasm_PIC24.o
+                  0x006386                  _vPortYield
